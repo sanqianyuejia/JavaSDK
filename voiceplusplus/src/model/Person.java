@@ -19,6 +19,7 @@ public class Person extends Object {
 	private String id;
 	private String name;
 	private String tag;
+	private boolean flag;
 	
 	private PersonService ps;
 	
@@ -54,6 +55,9 @@ public class Person extends Object {
 	public String getTag() {
 		return this.tag;
 	}
+	public boolean getFlag() {
+		return this.flag;
+	}
 	
 	public void setId(String id) {
 		this.id = id;
@@ -64,140 +68,172 @@ public class Person extends Object {
 	public void setTag(String tag) {
 		this.tag = tag;
 	}
-	
-	public boolean update() {
-		
-		
-		return true;
+	public void setFlag(boolean flag) {
+		this.flag = flag;
 	}
 	
-	public boolean delete() {
-		boolean isOK = false;		
+	public int delete() {
+		int ret = Constants.RETURN_SUCCESS;
+		
 		if (!this.id.isEmpty()) {
 			JSONObject result = getPersonService().personRemove(this.id);
-			isOK = result.getBoolean(Constants.SUCCESS);
 			
-			if (!isOK) {
+			if (!result.getBoolean(Constants.SUCCESS)) {
+				ret = result.getInt(Constants.ERROR_CODE);
 				super.setLastErr(result.getString(Constants.ERROR));
-				super.setErrCode(result.getInt(Constants.ERROR_CODE));
+				super.setErrCode(ret);
 			}
 		} else {
+			ret = Constants.LOCAL_ID_NULL;
 			super.setLastErr("id is empty");
 			super.setErrCode(0);
 		}
 
-		return isOK;
+		return ret;
 	}
 	
-	public boolean create() {
-		boolean isOK = false;		
+	public int create() {
+		int ret = Constants.RETURN_SUCCESS;
+		
 		if (!this.id.isEmpty()) {
 			JSONObject result = getPersonService().personCreate(this.id, this.name);			
-			isOK = result.getBoolean(Constants.SUCCESS);
 			
-			if (!isOK) {
+			if (!result.getBoolean(Constants.SUCCESS)) {
+				ret = result.getInt(Constants.ERROR_CODE);
 				super.setLastErr(result.getString(Constants.ERROR));
-				super.setErrCode(result.getInt(Constants.ERROR_CODE));
+				super.setErrCode(ret);
 			}
 		} else {		
+			ret = Constants.LOCAL_ID_NULL;
 			super.setLastErr("id is empty");
 			super.setErrCode(0);		
 		}
 		
-		return isOK;
+		return ret;
+	}
+	
+	public int getInfo() {
+		int ret = Constants.RETURN_SUCCESS;
+		
+		if (!this.id.isEmpty()) {
+			JSONObject result = getPersonService().personGetInfo(this.id);			
+			
+			if (!result.getBoolean(Constants.SUCCESS)) {
+				ret = result.getInt(Constants.ERROR_CODE);
+				super.setLastErr(result.getString(Constants.ERROR));
+				super.setErrCode(result.getInt(Constants.ERROR_CODE));
+			} else {
+				JSONArray person = (JSONArray) result.getJSONArray("person");
+				if (person.size() > 0) {
+					JSONObject p = (JSONObject) person.get(0);
+					this.setId(p.getString(Constants.IDENTY));
+					this.setName(p.getString(Constants.NAME));
+					this.setFlag(p.getBoolean(Constants.FLAG));
+				}
+			}
+		} else {		
+			ret = Constants.LOCAL_ID_NULL;
+			super.setLastErr("id is empty");
+			super.setErrCode(0);
+		}		
+		
+		return ret;
 	}
 	
 	public List<Speech> getSpeeches() {
 		List<Speech> speechList = new ArrayList<Speech>();
+		int ret = Constants.RETURN_SUCCESS;
 		
-		boolean isOK = false;
 		if (!this.id.isEmpty()) {
-			JSONObject result = getPersonService().personGetSpeeches(this.id);			
-			isOK = result.getBoolean(Constants.SUCCESS);
+			JSONObject result = getPersonService().personGetSpeeches(this.id);
 			
-			if (!isOK) {
+			if (!result.getBoolean(Constants.SUCCESS)) {
+				ret = result.getInt(Constants.ERROR_CODE);
 				super.setLastErr(result.getString(Constants.ERROR));
-				super.setErrCode(result.getInt(Constants.ERROR_CODE));
-				
-				return null;
+				super.setErrCode(ret);
 			} else {
 				JSONArray speeches = (JSONArray) result.getJSONArray("speech");
 				Iterator<JSONObject> it = speeches.iterator();
 				while (it.hasNext()) {
-					JSONObject ret = (JSONObject) it.next();
+					JSONObject object = (JSONObject) it.next();
 					Speech speech = new Speech();
-					speech.setId(ret.getString(Constants.IDENTY));
-					speech.setMD5(ret.getString(Constants.MD5));
-					speech.setSampleRate(ret.getInt(Constants.SAMPLE_RATE));
-					speech.setCodec(ret.getString(Constants.CODEC));
+					speech.setId(object.getString(Constants.IDENTY));
+					speech.setMD5(object.getString(Constants.MD5));
+					speech.setSampleRate(object.getInt(Constants.SAMPLE_RATE));
+					speech.setCodec(object.getString(Constants.CODEC));
 					
 					speechList.add(speech);
 				}
-				
-				return speechList;
 			}
-		} else {		
+		} else {
+			ret = Constants.LOCAL_ID_NULL;
 			super.setLastErr("id is empty");
 			super.setErrCode(0);
-			
-			return null;
 		}
+		
+		return speechList;
 	}
 	
-	public boolean addSpeech(Speech speech) {
-		boolean isOK = false;
+	public int addSpeech(Speech speech) {
+		int ret = Constants.RETURN_SUCCESS;
+		
 		if (!this.id.isEmpty()) {
 			JSONObject result = getPersonService().personAddSpeech(this.id, speech.getCodec(), 
-					speech.getSampleRate(), speech.getVerify(), speech.getData());			
-			isOK = result.getBoolean(Constants.SUCCESS);
+					speech.getSampleRate(), speech.getVerify(), speech.getData());
 			
-			if (!isOK) {
+			if (!result.getBoolean(Constants.SUCCESS)) {
+				ret = result.getInt(Constants.ERROR_CODE);
 				super.setLastErr(result.getString(Constants.ERROR));
-				super.setErrCode(result.getInt(Constants.ERROR_CODE));
+				super.setErrCode(ret);
 			} else {
 				speech.setMD5(result.getString(Constants.MD5));
 			}
 		} else {		
+			ret = Constants.LOCAL_ID_NULL;
 			super.setLastErr("id is empty");
 			super.setErrCode(0);		
 		}
 		
-		return isOK;
+		return ret;
 	}
 	
-	public boolean removeSpeeches() {
-		boolean isOK = false;
+	public int removeSpeeches() {
+		int ret = Constants.RETURN_SUCCESS;
+		
 		if (!this.id.isEmpty()) {
 			JSONObject result = getPersonService().personRemoveSpeeches(this.id);			
-			isOK = result.getBoolean(Constants.SUCCESS);
 			
-			if (!isOK) {
+			if (!result.getBoolean(Constants.SUCCESS)) {
+				ret = result.getInt(Constants.ERROR_CODE);
 				super.setLastErr(result.getString(Constants.ERROR));
-				super.setErrCode(result.getInt(Constants.ERROR_CODE));
+				super.setErrCode(ret);
 			}
 		} else {		
+			ret = Constants.LOCAL_ID_NULL;
 			super.setLastErr("id is empty");
 			super.setErrCode(0);		
 		}
 		
-		return isOK;
+		return ret;
 	}
 	
-	public boolean removeSpeech(Speech speech) {
-		boolean isOK = false;
+	public int removeSpeech(Speech speech) {
+		int ret = Constants.RETURN_SUCCESS;
+		
 		if (!speech.getMD5().isEmpty()) {
-			JSONObject result = getPersonService().personRemoveSpeech(speech.getMD5());			
-			isOK = result.getBoolean(Constants.SUCCESS);
+			JSONObject result = getPersonService().personRemoveSpeech(speech.getMD5());
 			
-			if (!isOK) {
+			if (!result.getBoolean(Constants.SUCCESS)) {
+				ret = result.getInt(Constants.ERROR_CODE);
 				super.setLastErr(result.getString(Constants.ERROR));
-				super.setErrCode(result.getInt(Constants.ERROR_CODE));
+				super.setErrCode(ret);
 			}
 		} else {		
+			ret = Constants.LOCAL_ID_NULL;
 			super.setLastErr("id is empty");
 			super.setErrCode(0);		
 		}
 		
-		return isOK;
+		return ret;
 	}
 }

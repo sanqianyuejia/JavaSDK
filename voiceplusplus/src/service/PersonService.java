@@ -35,6 +35,18 @@ public class PersonService extends BaseService {
 		return tokenJson;
 	}
 	
+	public JSONObject personGetInfo(String id) {
+		Map<String, String> parameters = new HashMap<String, String>();
+		parameters.put(Constants.API_KEY, super.getClient().getKey());
+		parameters.put(Constants.API_SECRET, super.getClient().getSecret());
+		parameters.put(Constants.ID, id);
+		
+		String tokenResult = HttpURLUtils.doPost(super.getClient().getServerString()+Constants.URL_PERSON_GETINFO, parameters);
+		JSONObject tokenJson = (JSONObject) JSONObject.fromObject(tokenResult);
+		
+		return tokenJson;
+	}
+	
 	public JSONObject personAddSpeech(String id, String codec, int sr, boolean bVerify, byte[] data) {
 		Map<String, String> parameters = new HashMap<String, String>();
 		parameters.put(Constants.API_KEY, super.getClient().getKey());

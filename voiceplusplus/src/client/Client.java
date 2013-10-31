@@ -12,7 +12,7 @@ public class Client extends Object {
 	private String key;
 	private String secret;
 	private String version;	
-	private int type;
+//	private int type;
 	private String server;
 	
 	private ClientService cs;
@@ -45,12 +45,12 @@ public class Client extends Object {
 	 * @param port
 	 * @return
 	 */
-	public synchronized boolean setServer(String host, int port, String version, int type) {
+	public synchronized int setServer(String host, int port, String version, int type) {
 		this.version = version;
-		this.type = type;
-		this.server = "http://"+host+":"+String.valueOf(port)+"/"+version;
+//		this.type = type;
+		this.server = "http://"+host+":"+String.valueOf(port)+"/"+this.version;
 		
-		return true;
+		return Constants.RETURN_SUCCESS;
 	}
 	
 	public String getServerString() {
@@ -64,27 +64,28 @@ public class Client extends Object {
 	 * @param speech
 	 * @return
 	 */
-	public synchronized boolean verifyVoiceprint(Person person, Speech speech, VerifyRes res) {
-		boolean isOK = false;
+	public synchronized int verifyVoiceprint(Person person, Speech speech, VerifyRes res) {
+		int ret = Constants.RETURN_SUCCESS;
 		
 		if (!person.getId().isEmpty()) {
 			JSONObject result = getClientService().clientVerifyVoiceprint(person.getId(), 
 					speech.getCodec(), speech.getSampleRate(), speech.getVerify(), speech.getData());
-			isOK = result.getBoolean(Constants.SUCCESS);
 			
-			if (!isOK) {
+			if (!result.getBoolean(Constants.SUCCESS)) {
+				ret = result.getInt(Constants.ERROR_CODE);
 				super.setLastErr(result.getString(Constants.ERROR));
-				super.setErrCode(result.getInt(Constants.ERROR_CODE));
+				super.setErrCode(ret);
 			} else {
 				res.setResult(result.getBoolean(Constants.RESULT));
 				res.setSimilarity(result.getDouble(Constants.SIMILARITY));
 			}
 		} else {
+			ret = Constants.LOCAL_ID_NULL;
 			super.setLastErr("id is empty");
 			super.setErrCode(0);
 		}
 		
-		return isOK;
+		return ret;
 	}
 	
 	/**
@@ -93,23 +94,24 @@ public class Client extends Object {
 	 * @param voiceprint
 	 * @return
 	 */
-	public synchronized boolean updateVoiceprint(Person person) {
-		boolean isOK = false;
+	public synchronized int updateVoiceprint(Person person) {
+		int ret = Constants.RETURN_SUCCESS;
 		
 		if (!person.getId().isEmpty()) {
 			JSONObject result = getClientService().clientRegisterVoiceprint(person.getId(), true);
-			isOK = result.getBoolean(Constants.SUCCESS);
 			
-			if (!isOK) {
+			if (!result.getBoolean(Constants.SUCCESS)) {
+				ret = result.getInt(Constants.ERROR_CODE);
 				super.setLastErr(result.getString(Constants.ERROR));
-				super.setErrCode(result.getInt(Constants.ERROR_CODE));
+				super.setErrCode(ret);
 			}
 		} else {
+			ret = Constants.LOCAL_ID_NULL;
 			super.setLastErr("id is empty");
 			super.setErrCode(0);
 		}
 		
-		return isOK;
+		return ret;
 	}
 	
 	
@@ -119,23 +121,24 @@ public class Client extends Object {
 	 * @param voiceprint
 	 * @return
 	 */
-	public synchronized boolean registerVoiceprint(Person person) {
-		boolean isOK = false;
+	public synchronized int registerVoiceprint(Person person) {
+		int ret = Constants.RETURN_SUCCESS;
 		
 		if (!person.getId().isEmpty()) {
 			JSONObject result = getClientService().clientRegisterVoiceprint(person.getId(), false);
-			isOK = result.getBoolean(Constants.SUCCESS);
 			
-			if (!isOK) {				
+			if (!result.getBoolean(Constants.SUCCESS)) {				
+				ret = result.getInt(Constants.ERROR_CODE);
 				super.setLastErr(result.getString(Constants.ERROR));
-				super.setErrCode(result.getInt(Constants.ERROR_CODE));				
+				super.setErrCode(ret);			
 			}
 		} else {
+			ret = Constants.LOCAL_ID_NULL;
 			super.setLastErr("id is empty");
 			super.setErrCode(0);
 		}
 		
-		return isOK;
+		return ret;
 	}
 	
 	public String getKey() {

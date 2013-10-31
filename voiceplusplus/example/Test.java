@@ -18,43 +18,45 @@ public class Test {
      * @throws ParseException 
      */
 	public static void main(String[] args) {
-		boolean isOK = false;
+		int ret = Constants.RETURN_FAIL;
 		
 		// Create server
-		Client client = new Client("598956a741545703342f5c6895654570", "598956a741545703342f5c6895654570");
-		client.setServer("192.168.1.2", 8888, "1", Constants.TEXT_DEPENDENT);
+		Client client = new Client("598917e159545703342f5c68956a7412", "598917e159545703342f5c68956a7412");
+		client.setServer("192.168.1.253", 8888, "1", Constants.TEXT_DEPENDENT);
 		
 		// Create Person object
-		Person person = new Person(client, "18959200000", "Mobile");
+		Person person = new Person(client, "18959211621", "Mobile");
 		
 		// Create Speech
 		Speech speech = new Speech("wav/pcm", 8000, true);		
-		speech.setData(readWavform("./wav/0-9.5.wav"));
+		speech.setData(readWavform("./wav/0-9.1.wav"));
 		speech.setVerify(false);
 		
 		// Create Person
-//		isOK = person.create();
+//		ret = person.create();
 		// Delete Person
-//		isOK = person.delete();
+//		ret = person.delete();
+		// Get Information
+//		ret = person.getInfo(); System.out.println("Register:"+String.valueOf(person.getFlag()));
 		// Add Speech to person
-//		isOK = person.addSpeech(speech);
+//		ret = person.addSpeech(speech);
 		// Remove Speech from person
-//		isOK = person.removeSpeech(speech);
+//		ret = person.removeSpeech(speech);
 		// Remove all speeches from person
-//		isOK = person.removeSpeeches();
+//		ret = person.removeSpeeches();
 		// Get all speeches from person
 //		List<Speech> list = person.getSpeeches(); System.out.println(list);
 		// Register voiceprint for speaker
-//		isOK = client.registerVoiceprint(person); // asynchronize
+//		ret = client.registerVoiceprint(person); // asynchronize
 		// Update voiceprint for speaker
-//		isOK = client.updateVoiceprint(person);	// asynchronize		
+//		ret = client.updateVoiceprint(person);	// asynchronize		
 		// Verify speaker's voiceprint
 		VerifyRes res = new VerifyRes();
-		isOK = client.verifyVoiceprint(person, speech, res); 
-		System.out.println("Result:"+String.valueOf(isOK)+"\tSimilarity:"+String.valueOf(res.getSimilarity()));
+		ret = client.verifyVoiceprint(person, speech, res); 
+		System.out.println("Result:"+String.valueOf(res.getResult())+"\tSimilarity:"+String.valueOf(res.getSimilarity()));
 
-		System.out.println(person.getId() + ":"+String.valueOf(isOK));
-		System.out.println(person.getId() + ":"+client.getLastErr());
+		System.out.println(person.getId() + ":" + String.valueOf(ret));
+		System.out.println(person.getId() + ":" + person.getLastErr() + ":" + client.getLastErr());
 	}	
 	
 	public static byte[] readWavform(String filename) {

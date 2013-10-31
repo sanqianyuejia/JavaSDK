@@ -11,6 +11,8 @@ public class ClientService extends BaseService {
 	
 	public JSONObject clientRegisterVoiceprint(String id, boolean bUpdate) {
 		Map<String, String> parameters = new HashMap<String, String>();
+		parameters.put(Constants.API_KEY, super.getClient().getKey());
+		parameters.put(Constants.API_SECRET, super.getClient().getSecret());
 		parameters.put(Constants.ID, id);
 		parameters.put(Constants.UPDATE, String.valueOf(bUpdate));
 		
