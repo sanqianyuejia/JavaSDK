@@ -23,6 +23,18 @@
 2. 参照example目录中的例子，编写应用程序
 3. 上线运营。上线之前，请联系管理员（lixm@kuaishang.cn）
 
+## 开发示例
+
+    func (this *AddController) Post() {
+            var user User
+            form := this.GetInput(&user)
+            if !form.Validates() {
+                    return 
+            }
+            models.UserInsert(&user)
+            this.Ctx.Redirect(302, "/admin/index")
+    }
+
 ## 下载
 
 ### 从 release 版本下载
