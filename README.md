@@ -15,3 +15,11 @@
 - 申请api key和secret（请发邮件至lixm@kuaishang.cn，邮件标题置为“快商通声纹识别开发平台：API调用申请”）
 - 参照example目录中的例子，编写应用程序
 - 上线运营。上线之前，请与联系管理员（lixm@kuaishang.cn）
+
+## 许可证
+
+Copyright (c) 2013 快商通信息技术有限公司
+
+基于 MIT 协议发布:
+
+* [www.opensource.org/licenses/MIT](http://www.opensource.org/licenses/MIT)
