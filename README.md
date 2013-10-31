@@ -14,4 +14,4 @@
 
 - 申请api key和secret（请发邮件至lixm@kuaishang.cn，邮件标题置为“快商通声纹识别开发平台：API调用申请”）
 - 参照example目录中的例子，编写应用程序
-- 上线运营。上线之前，请与联系管理员（lixm@kuaishang.cn）
+- 上线运营。上线之前，请联系管理员（lixm@kuaishang.cn）
