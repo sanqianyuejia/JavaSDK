@@ -198,6 +198,54 @@
 <td class="td">验证异常</td>
 </tr>
 
+<tr>
+<td class="td"><strong>4001</strong></td>
+<td class="td">speech too short</td>
+<td class="td">语音太短</td>
+</tr>
+
+<tr>
+<td class="td"><strong>4002</strong></td>
+<td class="td">speech too long</td>
+<td class="td">语音太长</td>
+</tr>
+
+<tr>
+<td class="td"><strong>4003</strong></td>
+<td class="td">speech sample rate error</td>
+<td class="td">语音采样率错误，目前仅支持8k</td>
+</tr>
+
+<tr>
+<td class="td"><strong>4004</strong></td>
+<td class="td">speech already exist</td>
+<td class="td">语音已存在</td>
+</tr>
+
+<tr>
+<td class="td"><strong>4005</strong></td>
+<td class="td">speech not exist</td>
+<td class="td">语音不存在</td>
+</tr>
+
+<tr>
+<td class="td"><strong>4006</strong></td>
+<td class="td">speech process error</td>
+<td class="td">语音处理错误</td>
+
+<tr>
+<td class="td"><strong>5001</strong></td>
+<td class="td">asr recognize error</td>
+<td class="td">语音识别错误</td>
+</tr>
+
+<tr>
+<td class="td"><strong>5002</strong></td>
+<td class="td">asr not matched</td>
+<td class="td">语音内容不匹配</td>
+
+</tr>
+
 </tbody></table>
 	
 
