@@ -88,6 +88,94 @@
     } else {
         System.out.println(person.getId() + ":" + client.getLastErr());
     }
+    
+    错误代码对照表：
+<table cellpadding="0" cellspacing="1" border="0" style="width:100%" class="tableborder">
+<tbody><tr>
+<th>错误代码</th>
+<th>错误信息</th>
+<th>详细描述</th>
+</tr>
+
+<tr>
+<td class="td"><strong>1001</strong></td>
+<td class="td">Auth fail</td>
+<td class="td">Key或Secret错误</td>
+</tr>
+
+<tr>
+<td class="td"><strong>1002</strong></td>
+<td class="td">network error</td>
+<td class="td">网络错误</td>
+</tr>
+
+<tr>
+<td class="td"><strong>1003</strong></td>
+<td class="td">internal error</td>
+<td class="td">未知错误</td>
+</tr>
+
+<tr>
+<td class="td"><strong>1004</strong></td>
+<td class="td">argument error</td>
+<td class="td">参数错误</td>
+</tr>
+
+<tr>
+<td class="td"><strong>1005</strong></td>
+<td class="td">database error</td>
+<td class="td">数据库错误</td>
+</tr>
+
+<tr>
+<td class="td"><strong>2001</strong></td>
+<td class="td">person already exist</td>
+<td class="td">说话人已存在</td>
+</tr>
+
+<tr>
+<td class="td"><strong>2002</strong></td>
+<td class="td">person not exist</td>
+<td class="td">说话人不存在</td>
+</tr>
+
+<tr>
+<td class="td"><strong>2003</strong></td>
+<td class="td">has no persons</td>
+<td class="td">没有任何说话人</td>
+</tr>
+
+<tr>
+<td class="td"><strong>2004</strong></td>
+<td class="td">person has no speeches</td>
+<td class="td">该说话人没有登记语音</td>
+</tr>
+
+<tr>
+<td class="td"><strong>3001</strong></td>
+<td class="td">oiceprint state error</td>
+<td class="td">声纹训练状态错误</td>
+</tr>
+
+<tr>
+<td class="td"><strong>3002</strong></td>
+<td class="td">voiceprint already registered</td>
+<td class="td">说话人声纹已注册</td>
+</tr>
+
+<tr>
+<td class="td"><strong>3003</strong></td>
+<td class="td">voiceprint has no speeches</td>
+<td class="td">该说话人不存在登记语音</td>
+</tr>
+
+<tr>
+<td class="td"><strong>3004</strong></td>
+<td class="td">verify error</td>
+<td class="td">验证异常</td>
+</tr>
+
+</tbody></table>
 	
 
 ## 下载
