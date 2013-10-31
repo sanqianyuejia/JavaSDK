@@ -25,15 +25,70 @@
 
 ## 开发示例
 
-    func (this *AddController) Post() {
-            var user User
-            form := this.GetInput(&user)
-            if !form.Validates() {
-                    return 
-            }
-            models.UserInsert(&user)
-            this.Ctx.Redirect(302, "/admin/index")
+    int ret = Constants.RETURN_FAIL;
+    // 创建Client实例
+    Client client = new Client("515968956a7412545798917e03342f5c", "515968956a7412545798917e03342f5c");
+    client.setServer("192.168.1.253", 8888, "1", Constants.TEXT_DEPENDENT);
+    // 创建Person实例
+    Person person = new Person(client, "18959211621", "Mobile");
+    // 创建语音片段实例
+    Speech speech = new Speech("wav/pcm", 8000, true);	// 语音格式；采样率（目前只支持8000）；	是否校验语音内容
+    speech.setData(readWavform("./wav/0-9.5.wav"));     // 读取语音数据
+    if ((ret = person.create()) == Constant.RETURN_SUCCESS)  {   // 创建说话人
+        System.out.println(person.getId() + ": create person success");
+    } else {
+        System.out.println(person.getId() + ":" + person.getLastErr());
     }
+    if ((ret = person.delete()) == Constant.RETURN_SUCCESS) {  // 删除说话人
+        System.out.println(person.getId() + ": delete person success");
+    } else {
+        System.out.println(person.getId() + ":" + person.getLastErr());
+    }
+    if ((ret = person.getInfo()) == Constant.RETURN_SUCCESS) { // 获取说话人详细信息
+        System.out.println(person.getId() + ": get perosn information success");
+        boolean bRegistered = person.getFlag();     // 获取声纹登记标志
+        if (bRegistered) {
+            System.out.println(person.getId() + " : Registered");
+        } else {
+            System.out.println(person.getId() + " : Not registered");
+        }
+    } else {
+        System.out.println(person.getId() + ":" + person.getLastErr());
+    }
+    if ((ret = person.addSpeech(speech)) == Constant.RETURN_SUCCESS) { // 为说话人增加登记语音
+        System.out.println(person.getId() + ": add speech " + speech.getMD5());
+    } else {
+        System.out.println(person.getId() + ":" + person.getLastErr());
+    }
+    if ((ret = person.removeSpeech(speech)) == Constant.RETURN_SUCCESS) {  // 删除说话人指定语音
+        System.out.println(person.getId() + ": delete speech " + speech.getMD5());
+    } else {
+        System.out.println(person.getId() + ":" + person.getLastErr());
+    }
+    if ((ret = person.removeSpeeches()) == Constant.RETURN_SUCCESS) {  // 删除说话人的所有登记语音
+        System.out.println(person.getId() + ": delete all speeches");
+    } else {
+        System.out.println(person.getId() + ":" + person.getLastErr());
+    }
+    // List<Speech> list = person.getSpeeches(); System.out.println(list); // 获取说话人登记语音列表
+    if ((ret = client.registerVoiceprint(person)) == Constant.RETURN_SUCCESS) { // 声纹登记接口（异步）
+        System.out.println(person.getId() + ": register voiceprint success");
+    } else {
+        System.out.println(person.getId() + ":" + client.getLastErr());
+    }
+    if ((ret = client.updateVoiceprint(person)) == Constant.RETURN_SUCCESS) { // 声纹更新接口（异步）
+        System.out.println(person.getId() + ": update voiceprint success");
+    } else {
+        System.out.println(person.getId() + ":" + client.getLastErr());
+    }
+    VerifyRes res = new VerifyRes();    // 存放声纹验证结果
+    if ((ret = client.verifyVoiceprint(person, speech, res)) == Constant.RETURN_SUCCESS) { // 声纹验证
+        System.out.println("Result:"+String.valueOf(res.getResult()));
+        System.out.println("Similarity:"+String.valueOf(res.getSimilarity()));
+    } else {
+        System.out.println(person.getId() + ":" + client.getLastErr());
+    }
+	
 
 ## 下载
 
