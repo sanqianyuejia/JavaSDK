@@ -79,7 +79,7 @@
         System.out.println(person.getId() + ":" + person.getLastErr());
     }
     
-     // 删除说话人指定语音
+     // 删除说话人的所有语音
     if ((ret = person.removeSpeeches()) == Constant.RETURN_SUCCESS) {  
         System.out.println(person.getId() + ": delete all speeches");
     } else {
@@ -89,7 +89,7 @@
     // 获取说话人登记语音列表
     // List<Speech> list = person.getSpeeches(); System.out.println(list); 
     
-    // 获取说话人登记语音列表
+    // 训练说话人模型（异步）
     if ((ret = client.registerVoiceprint(person)) == Constant.RETURN_SUCCESS) { 
         System.out.println(person.getId() + ": register voiceprint success");
     } else {
