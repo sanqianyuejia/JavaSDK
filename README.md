@@ -6,4 +6,6 @@
 - [远程教育身份认证]
 - [高校教学实验平台]
 
+![](voiceplusplus.png)
+
 商务合作请发[EMail](lixm@kuaishang.cn)
