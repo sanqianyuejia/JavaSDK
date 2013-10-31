@@ -9,7 +9,7 @@
 
 ![](voiceplusplus.png)
 
-# 快速上手
+## 快速上手
 请参考以下步骤进行开发
 
 - 申请api key和secret（请发邮件至lixm@kuaishang.cn，邮件标题置为“快商通声纹识别开发平台：API调用申请”）
