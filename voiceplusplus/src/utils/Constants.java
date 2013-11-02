@@ -9,10 +9,10 @@ public class Constants {
 	public static final int RETURN_FAIL = 1;
 	public static final int LOCAL_ID_NULL = 2;
 	public static final int SYS_AUTHORIZATION_ERROR = 1001;
-	public static final int SYS_NETWORK_ERROR = 1002;
-	public static final int SYS_INTERNAL_ERROR = 1003;
-	public static final int SYS_ARGUMENTS_ERROR = 1004;
-	public static final int SYS_DATABASE_ERROR = 1005;
+	public static final int SYS_NETWORK_ERROR 		= 1002;
+	public static final int SYS_INTERNAL_ERROR 		= 1003;
+	public static final int SYS_ARGUMENTS_ERROR 	= 1004;
+	public static final int SYS_DATABASE_ERROR 		= 1005;
 	
 	public static final int PERSON_ALREADY_EXIST = 2001;
 	public static final int PERSON_NOT_EXIST     = 2002;
@@ -23,6 +23,7 @@ public class Constants {
 	public static final int VOICEPRINT_ALREADY_REGISTERED = 3002;
 	public static final int VOICEPRINT_NO_SPEECHES        = 3003;
 	public static final int VOICEPRINT_VERIFY_ERROR       = 3004;
+	public static final int VOICEPRINT_NOT_TRAINED 		  = 3005;
 	
 	public static final int SPEECH_TOO_SHORT        = 4001;
 	public static final int SPEECH_TOO_LONG         = 4002;

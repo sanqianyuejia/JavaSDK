@@ -199,6 +199,12 @@
 </tr>
 
 <tr>
+<td class="td"><strong>3005</strong></td>
+<td class="td">voiceprint not trained</td>
+<td class="td">没有登记声纹</td>
+</tr>
+
+<tr>
 <td class="td"><strong>4001</strong></td>
 <td class="td">speech too short</td>
 <td class="td">语音太短</td>
