@@ -151,6 +151,12 @@
 </tr>
 
 <tr>
+<td class="td"><strong>1006</strong></td>
+<td class="td">system file lost</td>
+<td class="td">系统文件丢失</td>
+</tr>
+
+<tr>
 <td class="td"><strong>2001</strong></td>
 <td class="td">person already exist</td>
 <td class="td">说话人已存在</td>
@@ -176,7 +182,7 @@
 
 <tr>
 <td class="td"><strong>3001</strong></td>
-<td class="td">oiceprint state error</td>
+<td class="td">voiceprint state error</td>
 <td class="td">声纹训练状态错误</td>
 </tr>
 
