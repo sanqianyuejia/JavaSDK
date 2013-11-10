@@ -3,7 +3,11 @@ package utils;
 public class Constants {
 	public static final int TEXT_DEPENDENT = 0;
 	public static final int TEXT_INDEPENDENT = 1;
-	public static final int TEXT_PROMPT = 2;
+	public static final int TEXT_PROMPT = 2;	
+	
+	public static final String TEXT_DEPENDENT_STR = "dependent";
+	public static final String TEXT_INDEPENDENT_STR = "independent";
+	public static final String TEXT_PROMPT_STR = "prompt";
 	
 	public static final int RETURN_SUCCESS = 0;
 	public static final int RETURN_FAIL = 1;
@@ -55,6 +59,8 @@ public class Constants {
     public static final String SIMILARITY = "similarity";
     public static final String ERROR = "error";
     public static final String ERROR_CODE = "error_code";
+	public static final String TRAIN_MODE = "mode";
+	public static final String SPEECH_RULE = "rule";
     
     // server: http://192.168.1.253:8888/1/
     public static final String URL_PERSON_CREATE = "/person/create.json";

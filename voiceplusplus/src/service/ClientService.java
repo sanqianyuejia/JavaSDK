@@ -15,6 +15,7 @@ public class ClientService extends BaseService {
 		parameters.put(Constants.API_SECRET, super.getClient().getSecret());
 		parameters.put(Constants.ID, id);
 		parameters.put(Constants.UPDATE, String.valueOf(bUpdate));
+		parameters.put(Constants.TRAIN_MODE, super.getClient().getType());
 		
 		String tokenResult = HttpURLUtils.doPost(super.getClient().getServerString()+Constants.URL_MODEL_REGISTER, parameters);
 		JSONObject tokenJson = (JSONObject) JSONObject.fromObject(tokenResult);
@@ -29,6 +30,7 @@ public class ClientService extends BaseService {
 		parameters.put(Constants.ID, id);
 		parameters.put(Constants.CODEC, codec);
 		parameters.put(Constants.SAMPLERATE, String.valueOf(sr));
+//		parameters.put(Constants.VERIFY, bVerify);
 		
 		String tokenResult = HttpURLUtils.doUploadFile(super.getClient().getServerString()+Constants.URL_MODEL_VERIFY, parameters, 
 				Constants.FILEPARAM, "./testfile.wav", "multipart/form-data;", data);

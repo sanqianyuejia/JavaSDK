@@ -12,7 +12,7 @@ public class Client extends Object {
 	private String key;
 	private String secret;
 	private String version;	
-//	private int type;
+	private int type;
 	private String server;
 	
 	private ClientService cs;
@@ -47,7 +47,7 @@ public class Client extends Object {
 	 */
 	public synchronized int setServer(String host, int port, String version, int type) {
 		this.version = version;
-//		this.type = type;
+		this.type = type;
 		this.server = "http://"+host+":"+String.valueOf(port)+"/"+this.version;
 		
 		return Constants.RETURN_SUCCESS;
@@ -130,7 +130,7 @@ public class Client extends Object {
 			if (!result.getBoolean(Constants.SUCCESS)) {				
 				ret = result.getInt(Constants.ERROR_CODE);
 				super.setLastErr(result.getString(Constants.ERROR));
-				super.setErrCode(ret);			
+				super.setErrCode(ret);
 			}
 		} else {
 			ret = Constants.LOCAL_ID_NULL;
@@ -155,5 +155,19 @@ public class Client extends Object {
 	
 	public void setSecret(String secret) {
 		this.secret = secret;
+	}
+	
+	public void setType(int type) {
+		this.type = type;
+	}
+	
+	public String getType() {
+		if (this.type == Constants.TEXT_INDEPENDENT) {
+			return Constants.TEXT_INDEPENDENT_STR;
+		} else if (this.type == Constants.TEXT_PROMPT) {
+			return Constants.TEXT_PROMPT_STR;
+		} else {
+			return Constants.TEXT_DEPENDENT_STR;
+		}
 	}
 }

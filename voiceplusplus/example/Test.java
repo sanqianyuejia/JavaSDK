@@ -30,7 +30,7 @@ public class Test {
 		// Create Speech
 		Speech speech = new Speech("wav/pcm", 8000, true);		
 		speech.setData(readWavform("./wav/0-9.1.wav"));
-		speech.setVerify(false);
+		speech.setRule("[0-9]{6, 12}");
 		
 		// Create Person
 //		ret = person.create();

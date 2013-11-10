@@ -179,7 +179,7 @@ public class Person extends Object {
 		
 		if (!this.id.isEmpty()) {
 			JSONObject result = getPersonService().personAddSpeech(this.id, speech.getCodec(), 
-					speech.getSampleRate(), speech.getVerify(), speech.getData());
+					speech.getSampleRate(), speech.getVerify(), speech.getRule(), speech.getData());
 			
 			if (!result.getBoolean(Constants.SUCCESS)) {
 				ret = result.getInt(Constants.ERROR_CODE);

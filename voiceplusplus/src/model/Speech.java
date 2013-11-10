@@ -10,6 +10,7 @@ public class Speech {
 	private int sr;
 	private int size;
 	private boolean bverify;
+	private String rule;
 	
 	public Speech() {
 		
@@ -58,6 +59,13 @@ public class Speech {
 	}
 	public boolean getVerify() {
 		return this.bverify;
+	}
+	
+	public String getRule() {
+		return this.rule;
+	}
+	public void setRule(String rule) {
+		this.rule = rule;
 	}
 	
 	
