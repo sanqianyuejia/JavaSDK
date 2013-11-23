@@ -2,6 +2,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import utils.Constants;
@@ -21,16 +23,16 @@ public class Test {
 		int ret = Constants.RETURN_FAIL;
 		
 		// Create server
-		Client client = new Client("598917e159545703342f5c68956a7412", "598917e159545703342f5c68956a7412");
-		client.setServer("192.168.1.253", 8888, "1", Constants.TEXT_DEPENDENT);
-		
-		// Create Person object
-		Person person = new Person(client, "18959211621", "Mobile");
+		Client client = new Client("d9b01e1ee0885e0b7074ed92a1555977", "d9b01e1ee0885e0b7074ed92a1555977");
+		client.setServer("127.0.0.1", 83, "1", Constants.TEXT_DEPENDENT);
+	
+		// Create person
+		Person person = new Person(client, "11111111111", "½­ÄÏ´º ");
 		
 		// Create Speech
-		Speech speech = new Speech("wav/pcm", 8000, true);		
-		speech.setData(readWavform("./wav/0-9.1.wav"));
-		speech.setRule("[0-9]{6, 12}");
+		Speech speech = new Speech("pcm/alaw", 8000, true);		
+		speech.setData(readWavform("C:/Users/TS/Downloads/49fd0f6cb48b75c9d0a2fd5718a3a94a.pcm"));
+		speech.setRule("*");
 		
 		// Create Person
 //		ret = person.create();
@@ -50,14 +52,16 @@ public class Test {
 //		ret = client.registerVoiceprint(person); // asynchronize
 		// Update voiceprint for speaker
 //		ret = client.updateVoiceprint(person);	// asynchronize		
-		// Verify speaker's voiceprint
+		// Verify speaker's voiceprint;
+//		for(;;) {
 		VerifyRes res = new VerifyRes();
 		ret = client.verifyVoiceprint(person, speech, res); 
 		System.out.println("Result:"+String.valueOf(res.getResult())+"\tSimilarity:"+String.valueOf(res.getSimilarity()));
 
 		System.out.println(person.getId() + ":" + String.valueOf(ret));
 		System.out.println(person.getId() + ":" + person.getLastErr() + ":" + client.getLastErr());
-	}	
+//		}
+	}
 	
 	public static byte[] readWavform(String filename) {
 
