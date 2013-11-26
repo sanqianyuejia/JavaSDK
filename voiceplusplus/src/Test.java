@@ -23,16 +23,16 @@ public class Test {
 		int ret = Constants.RETURN_FAIL;
 		
 		// Create server
-		Client client = new Client("d9b01e1ee0885e0b7074ed92a1555977", "d9b01e1ee0885e0b7074ed92a1555977");
-		client.setServer("127.0.0.1", 83, "1", Constants.TEXT_DEPENDENT);
+		Client client = new Client("1ee0d9b01e8d92a155597785e0b7074e", "1ee0d9b01e8d92a155597785e0b7074e");
+		client.setServer("42.96.250.245", 81, "1", Constants.TEXT_DEPENDENT);
 	
 		// Create person
 		Person person = new Person(client, "11111111111", "½­ÄÏ´º ");
 		
 		// Create Speech
-		Speech speech = new Speech("pcm/alaw", 8000, true);		
-		speech.setData(readWavform("C:/Users/TS/Downloads/49fd0f6cb48b75c9d0a2fd5718a3a94a.pcm"));
-		speech.setRule("*");	// setRule(id);
+		Speech speech = new Speech("pcm/raw", 8000, true);		
+		speech.setData(readWavform("./wav/0-9.7.wav"));
+		speech.setRule("0123456789");
 		
 		// Create Person
 //		ret = person.create();
@@ -41,7 +41,7 @@ public class Test {
 		// Get Information
 //		ret = person.getInfo(); System.out.println("Register:"+String.valueOf(person.getFlag()));
 		// Add Speech to person
-//		ret = person.addSpeech(speech);
+		ret = person.addSpeech(speech);
 		// Remove Speech from person
 //		ret = person.removeSpeech(speech);
 		// Remove all speeches from person
@@ -54,9 +54,9 @@ public class Test {
 //		ret = client.updateVoiceprint(person);	// asynchronize		
 		// Verify speaker's voiceprint;
 //		for(;;) {
-		VerifyRes res = new VerifyRes();
-		ret = client.verifyVoiceprint(person, speech, res); 
-		System.out.println("Result:"+String.valueOf(res.getResult())+"\tSimilarity:"+String.valueOf(res.getSimilarity()));
+//		VerifyRes res = new VerifyRes();
+//		ret = client.verifyVoiceprint(person, speech, res); 
+//		System.out.println("Result:"+String.valueOf(res.getResult())+"\tSimilarity:"+String.valueOf(res.getSimilarity()));
 
 		System.out.println(person.getId() + ":" + String.valueOf(ret));
 		System.out.println(person.getId() + ":" + person.getLastErr() + ":" + client.getLastErr());
