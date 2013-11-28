@@ -211,6 +211,12 @@
 </tr>
 
 <tr>
+<td class="td"><strong>3006</strong></td>
+<td class="td">identify error</td>
+<td class="td">声纹辨认发生错误</td>
+</tr>
+
+<tr>
 <td class="td"><strong>4001</strong></td>
 <td class="td">speech too short</td>
 <td class="td">语音太短</td>
