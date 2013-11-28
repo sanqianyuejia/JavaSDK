@@ -24,14 +24,14 @@ public class Test {
 		
 		// Create server
 		Client client = new Client("1ee0d9b01e8d92a155597785e0b7074e", "1ee0d9b01e8d92a155597785e0b7074e");
-		client.setServer("127.0.0.1", 81, "1", Constants.TEXT_DEPENDENT);
+		client.setServer("42.96.250.245", 81, "1", Constants.TEXT_DEPENDENT);
 	
 		// Create person
-		Person person = new Person(client, "123456789", "admin");
+		Person person = new Person(client, "123456789", "lixm");
 		
 		// Create Speech
 		Speech speech = new Speech("pcm/raw", 8000, true);
-		speech.setData(readWavform("./wav/0-9.1.wav"));
+		speech.setData(readWavform("./wav/0-9.11.wav"));
 		speech.setRule("*");
 		
 		// Create Person
