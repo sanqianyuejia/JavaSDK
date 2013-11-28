@@ -28,6 +28,7 @@ public class Constants {
 	public static final int VOICEPRINT_NO_SPEECHES        = 3003;
 	public static final int VOICEPRINT_VERIFY_ERROR       = 3004;
 	public static final int VOICEPRINT_NOT_TRAINED 		  = 3005;
+	public static final int VOICEPRINT_IDENTIFY_ERROR	  = 3006; 
 	
 	public static final int SPEECH_TOO_SHORT        = 4001;
 	public static final int SPEECH_TOO_LONG         = 4002;
@@ -75,4 +76,5 @@ public class Constants {
     
     public static final String URL_MODEL_REGISTER = "/model/train.json";
     public static final String URL_MODEL_VERIFY = "/model/verify.json";
+    public static final String URL_MODEL_IDENTIFY = "/model/identify.json";
 }

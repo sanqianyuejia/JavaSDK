@@ -76,7 +76,7 @@ public class Person extends Object {
 		int ret = Constants.RETURN_SUCCESS;
 		
 		if (!this.id.isEmpty()) {
-			JSONObject result = getPersonService().personRemove(this.id);
+			JSONObject result = getPersonService().personRemove(this.id, this.name);
 			
 			if (!result.getBoolean(Constants.SUCCESS)) {
 				ret = result.getInt(Constants.ERROR_CODE);
@@ -140,6 +140,7 @@ public class Person extends Object {
 		return ret;
 	}
 	
+	@Deprecated
 	public List<Speech> getSpeeches() {
 		List<Speech> speechList = new ArrayList<Speech>();
 		int ret = Constants.RETURN_SUCCESS;
@@ -178,7 +179,7 @@ public class Person extends Object {
 		int ret = Constants.RETURN_SUCCESS;
 		
 		if (!this.id.isEmpty()) {
-			JSONObject result = getPersonService().personAddSpeech(this.id, speech.getCodec(), 
+			JSONObject result = getPersonService().personAddSpeech(this.id, this.name, speech.getCodec(), 
 					speech.getSampleRate(), speech.getVerify(), speech.getRule(), speech.getData());
 			
 			if (!result.getBoolean(Constants.SUCCESS)) {
@@ -201,7 +202,7 @@ public class Person extends Object {
 		int ret = Constants.RETURN_SUCCESS;
 		
 		if (!this.id.isEmpty()) {
-			JSONObject result = getPersonService().personRemoveSpeeches(this.id);			
+			JSONObject result = getPersonService().personRemoveSpeeches(this.id, this.name);			
 			
 			if (!result.getBoolean(Constants.SUCCESS)) {
 				ret = result.getInt(Constants.ERROR_CODE);
@@ -217,6 +218,7 @@ public class Person extends Object {
 		return ret;
 	}
 	
+	@Deprecated
 	public int removeSpeech(Speech speech) {
 		int ret = Constants.RETURN_SUCCESS;
 		

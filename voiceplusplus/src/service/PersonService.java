@@ -23,11 +23,12 @@ public class PersonService extends BaseService {
 		return tokenJson;
 	}
 	
-	public JSONObject personRemove(String id) {
+	public JSONObject personRemove(String id, String name) {
 		Map<String, String> parameters = new HashMap<String, String>();
 		parameters.put(Constants.API_KEY, super.getClient().getKey());
 		parameters.put(Constants.API_SECRET, super.getClient().getSecret());
 		parameters.put(Constants.ID, id);
+		parameters.put(Constants.NAME, name);
 		
 		String tokenResult = HttpURLUtils.doPost(super.getClient().getServerString()+Constants.URL_PERSON_DELETE, parameters);
 		JSONObject tokenJson = (JSONObject) JSONObject.fromObject(tokenResult);
@@ -47,11 +48,12 @@ public class PersonService extends BaseService {
 		return tokenJson;
 	}
 	
-	public JSONObject personAddSpeech(String id, String codec, int sr, boolean bVerify, String rule, byte[] data) {
+	public JSONObject personAddSpeech(String id, String name, String codec, int sr, boolean bVerify, String rule, byte[] data) {
 		Map<String, String> parameters = new HashMap<String, String>();
 		parameters.put(Constants.API_KEY, super.getClient().getKey());
 		parameters.put(Constants.API_SECRET, super.getClient().getSecret());
 		parameters.put(Constants.ID, id);
+		parameters.put(Constants.NAME, name);
 		parameters.put(Constants.CODEC, codec);
 		parameters.put(Constants.SAMPLERATE, String.valueOf(sr));
 		parameters.put(Constants.VERIFY, String.valueOf(bVerify));
@@ -65,11 +67,12 @@ public class PersonService extends BaseService {
 		return tokenJson;
 	}
 	
-	public JSONObject personRemoveSpeeches(String id) {
+	public JSONObject personRemoveSpeeches(String id, String name) {
 		Map<String, String> parameters = new HashMap<String, String>();
 		parameters.put(Constants.API_KEY, super.getClient().getKey());
 		parameters.put(Constants.API_SECRET, super.getClient().getSecret());
 		parameters.put(Constants.ID, id);
+		parameters.put(Constants.NAME, name);
 		
 		String tokenResult = HttpURLUtils.doPost(super.getClient().getServerString()+Constants.URL_SPEECH_DELETE_PERSON, parameters);
 		JSONObject tokenJson = (JSONObject) JSONObject.fromObject(tokenResult);

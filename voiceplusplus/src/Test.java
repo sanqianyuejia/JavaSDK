@@ -24,15 +24,15 @@ public class Test {
 		
 		// Create server
 		Client client = new Client("1ee0d9b01e8d92a155597785e0b7074e", "1ee0d9b01e8d92a155597785e0b7074e");
-		client.setServer("42.96.250.245", 81, "1", Constants.TEXT_DEPENDENT);
+		client.setServer("127.0.0.1", 81, "1", Constants.TEXT_DEPENDENT);
 	
 		// Create person
-		Person person = new Person(client, "11111111111", "½­ÄÏ´º ");
+		Person person = new Person(client, "123456789", "admin");
 		
 		// Create Speech
-		Speech speech = new Speech("pcm/raw", 8000, true);		
-		speech.setData(readWavform("./wav/0-9.7.wav"));
-		speech.setRule("0123456789");
+		Speech speech = new Speech("pcm/raw", 8000, true);
+		speech.setData(readWavform("./wav/0-9.1.wav"));
+		speech.setRule("*");
 		
 		// Create Person
 //		ret = person.create();
@@ -41,13 +41,9 @@ public class Test {
 		// Get Information
 //		ret = person.getInfo(); System.out.println("Register:"+String.valueOf(person.getFlag()));
 		// Add Speech to person
-		ret = person.addSpeech(speech);
-		// Remove Speech from person
-//		ret = person.removeSpeech(speech);
+//		ret = person.addSpeech(speech);
 		// Remove all speeches from person
 //		ret = person.removeSpeeches();
-		// Get all speeches from person
-//		List<Speech> list = person.getSpeeches(); System.out.println(list);
 		// Register voiceprint for speaker
 //		ret = client.registerVoiceprint(person); // asynchronize
 		// Update voiceprint for speaker
@@ -55,8 +51,13 @@ public class Test {
 		// Verify speaker's voiceprint;
 //		for(;;) {
 //		VerifyRes res = new VerifyRes();
-//		ret = client.verifyVoiceprint(person, speech, res); 
+//		ret = client.verifyVoiceprint(person, speech, res); 		 
 //		System.out.println("Result:"+String.valueOf(res.getResult())+"\tSimilarity:"+String.valueOf(res.getSimilarity()));
+//		
+		VerifyRes res = new VerifyRes();
+		ret = client.identifyVoiceprint(person, speech, res);
+		System.out.println("Result:"+String.valueOf(res.getResult())+"\tSimilarity:"+String.valueOf(res.getSimilarity())
+				+"\tId:"+person.getId()+"\tName:"+person.getName());
 
 		System.out.println(person.getId() + ":" + String.valueOf(ret));
 		System.out.println(person.getId() + ":" + person.getLastErr() + ":" + client.getLastErr());

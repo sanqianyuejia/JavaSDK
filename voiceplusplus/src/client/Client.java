@@ -88,6 +88,32 @@ public class Client extends Object {
 		return ret;
 	}
 	
+	public synchronized int identifyVoiceprint(Person person, Speech speech, VerifyRes res) {
+		int ret = Constants.RETURN_SUCCESS;
+		
+		if (!person.getId().isEmpty()) {
+			JSONObject result = getClientService().clientIdentifyVoiceprint(speech.getCodec(), 
+					speech.getSampleRate(), speech.getData());
+			
+			if (!result.getBoolean(Constants.SUCCESS)) {
+				ret = result.getInt(Constants.ERROR_CODE);
+				super.setLastErr(result.getString(Constants.ERROR));
+				super.setErrCode(ret);
+			} else {
+				person.setId(result.getString(Constants.ID));
+				person.setName(result.getString(Constants.NAME));
+				res.setResult(result.getBoolean(Constants.RESULT));
+				res.setSimilarity(result.getDouble(Constants.SIMILARITY));
+			}
+		} else {
+			ret = Constants.LOCAL_ID_NULL;
+			super.setLastErr("id is empty");
+			super.setErrCode(0);
+		}
+		
+		return ret;
+	}
+	
 	/**
 	 * Update speaker's voiceprint
 	 * 
@@ -98,7 +124,7 @@ public class Client extends Object {
 		int ret = Constants.RETURN_SUCCESS;
 		
 		if (!person.getId().isEmpty()) {
-			JSONObject result = getClientService().clientRegisterVoiceprint(person.getId(), true);
+			JSONObject result = getClientService().clientRegisterVoiceprint(person.getId(), person.getName(), true);
 			
 			if (!result.getBoolean(Constants.SUCCESS)) {
 				ret = result.getInt(Constants.ERROR_CODE);
@@ -125,7 +151,7 @@ public class Client extends Object {
 		int ret = Constants.RETURN_SUCCESS;
 		
 		if (!person.getId().isEmpty()) {
-			JSONObject result = getClientService().clientRegisterVoiceprint(person.getId(), false);
+			JSONObject result = getClientService().clientRegisterVoiceprint(person.getId(), person.getName(), false);
 			
 			if (!result.getBoolean(Constants.SUCCESS)) {				
 				ret = result.getInt(Constants.ERROR_CODE);
