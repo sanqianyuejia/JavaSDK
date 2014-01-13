@@ -23,94 +23,87 @@
 2. 参照example目录中的例子，编写应用程序
 3. 上线运营。上线之前，请联系管理员（lixm@kuaishang.cn）
 
-## 开发示例
+## 开发示例——注册说话人声纹
 
-    int ret = Constants.RETURN_FAIL;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+import utils.Constants;
+import client.Client;
+import model.Person;
+import model.Speech;
+
+public class Test {
     
-    // 创建Client实例
-    Client client = new Client("515968956a7412545798917e03342f5c", "515968956a7412545798917e03342f5c");
-    client.setServer("192.168.1.253", 8888, "1", Constants.TEXT_DEPENDENT);
-    
-    // 创建Person实例
-    Person person = new Person(client, "18959211621", "Mobile");
-    
-    // 创建语音片段实例
-    Speech speech = new Speech("wav/pcm", 8000, true);	// 语音格式；采样率（目前只支持8000）；	是否校验语音内容
-    speech.setData(readWavform("./wav/0-9.5.wav"));     // 读取语音数据
-    
-    // 创建说话人
-    if ((ret = person.create()) == Constant.RETURN_SUCCESS)  {
-        System.out.println(person.getId() + ": create person success");
-    } else {
-        System.out.println(person.getId() + ":" + person.getLastErr());
-    }
-    
-    // 删除说话人
-    if ((ret = person.delete()) == Constant.RETURN_SUCCESS) {  
-        System.out.println(person.getId() + ": delete person success");
-    } else {
-        System.out.println(person.getId() + ":" + person.getLastErr());
-    }
-    
-    // 获取说话人详细信息
-    if ((ret = person.getInfo()) == Constant.RETURN_SUCCESS) { 
-        System.out.println(person.getId() + ": get perosn information success");
-        boolean bRegistered = person.getFlag();     // 获取声纹登记标志
-        if (bRegistered) {
-            System.out.println(person.getId() + " : Registered");
-        } else {
-            System.out.println(person.getId() + " : Not registered");
+    /**
+     * @param args
+     * @throws IOException 
+     * @throws ParseException 
+     */
+    public static void main(String[] args) {
+        int ret = -1;       
+        
+        // Create server
+        Client client = new Client("1ee0d9b01e8d92a155597785e0b7074e", "1ee0d9b01e8d92a155597785e0b7074e");
+        client.setServer("openapi.shengwenyun.com", 80, "1", Constants.TEXT_DEPENDENT);
+        
+        // Create person
+        Person person = new Person(client, "123456789", "test");
+        if ( (ret = person.create()) != Constants.RETURN_SUCCESS) {
+            System.err.println(person.getLastErr()+":"+String.valueOf(ret));
+            return;
         }
-    } else {
-        System.out.println(person.getId() + ":" + person.getLastErr());
+        
+        // Create Speech
+        Speech speech = new Speech("pcm/raw", 8000, true);      
+        speech.setRule("123456789");
+        
+        // Add Speech to person
+        for (String filepath : args) {
+            speech.setData(readWavform(filepath));      // readWavform是读文件到byte缓冲的函数
+            if ((ret = person.addSpeech(speech)) != Constants.RETURN_SUCCESS) {
+                System.err.println(person.getLastErr()+":"+String.valueOf(ret));
+                return;
+            }
+        }
+        
+        // Register voiceprint for speaker
+        if ((ret = client.registerVoiceprint(person)) != Constants.RETURN_SUCCESS) {
+            System.err.println(person.getLastErr()+":"+String.valueOf(ret));
+            return;
+        }
+        
+        // Output result
+        System.out.println(person.getId()+": Register voiceprint success.");
     }
     
-    // 为说话人增加登记语音
-    if ((ret = person.addSpeech(speech)) == Constant.RETURN_SUCCESS) { 
-        System.out.println(person.getId() + ": add speech " + speech.getMD5());
-    } else {
-        System.out.println(person.getId() + ":" + person.getLastErr());
+    public static byte[] readWavform(String filename) {
+
+        int regLen = 0; 
+        byte[] regbuffer = null;
+        try {
+            FileInputStream inputsteam = new FileInputStream(new File(filename));           
+            inputsteam.skip(100);
+            
+            regLen = inputsteam.available() - 100;
+            regbuffer = new byte[regLen];
+            if ((regLen = inputsteam.read(regbuffer, 0, regLen))<0) {
+                System.out.println("error when read pcm file.");
+            }
+            
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        
+        return regbuffer;
     }
-    
-    // 删除说话人指定语音
-    if ((ret = person.removeSpeech(speech)) == Constant.RETURN_SUCCESS) { 
-        System.out.println(person.getId() + ": delete speech " + speech.getMD5());
-    } else {
-        System.out.println(person.getId() + ":" + person.getLastErr());
-    }
-    
-     // 删除说话人的所有语音
-    if ((ret = person.removeSpeeches()) == Constant.RETURN_SUCCESS) {  
-        System.out.println(person.getId() + ": delete all speeches");
-    } else {
-        System.out.println(person.getId() + ":" + person.getLastErr());
-    }
-    
-    // 获取说话人登记语音列表
-    // List<Speech> list = person.getSpeeches(); System.out.println(list); 
-    
-    // 训练说话人模型（异步）
-    if ((ret = client.registerVoiceprint(person)) == Constant.RETURN_SUCCESS) { 
-        System.out.println(person.getId() + ": register voiceprint success");
-    } else {
-        System.out.println(person.getId() + ":" + client.getLastErr());
-    }
-    
-    // 声纹更新接口（异步）
-    if ((ret = client.updateVoiceprint(person)) == Constant.RETURN_SUCCESS) { 
-        System.out.println(person.getId() + ": update voiceprint success");
-    } else {
-        System.out.println(person.getId() + ":" + client.getLastErr());
-    }
-    
-    // 存放声纹验证结果
-    VerifyRes res = new VerifyRes();    // 存放声纹验证结果
-    if ((ret = client.verifyVoiceprint(person, speech, res)) == Constant.RETURN_SUCCESS) { 
-        System.out.println("Result:"+String.valueOf(res.getResult()));
-        System.out.println("Similarity:"+String.valueOf(res.getSimilarity()));
-    } else {
-        System.out.println(person.getId() + ":" + client.getLastErr());
-    }
+}
 
 ## 错误代码对照表
 <table cellpadding="0" cellspacing="1" border="0" style="width:100%" class="tableborder">
