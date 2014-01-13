@@ -25,15 +25,15 @@
 
 ## 开发示例——注册说话人声纹
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.File;  
+import java.io.FileInputStream;  
+import java.io.FileNotFoundException;  
+import java.io.IOException;  
 
-import utils.Constants;
-import client.Client;
-import model.Person;
-import model.Speech;
+import utils.Constants;  
+import client.Client;  
+import model.Person;  
+import model.Speech;  
 
 public class Test {
     
