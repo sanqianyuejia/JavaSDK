@@ -98,7 +98,7 @@ public class Client extends Object {
 			VerifyRes res) {
 		int ret = Constants.RETURN_SUCCESS;
 
-		JSONObject result = getClientService().clientIdentifyVoiceprint(
+		JSONObject result = getClientService().clientIdentifyVoiceprint(person.getId(),
 				speech.getCodec(), speech.getSampleRate(), speech.getData());
 
 		if (!result.getBoolean(Constants.SUCCESS)) {

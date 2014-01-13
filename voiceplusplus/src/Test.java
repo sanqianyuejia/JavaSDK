@@ -2,13 +2,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Date;
-import java.text.SimpleDateFormat;
-import java.util.List;
 
 import utils.Constants;
 import client.Client;
-import client.VerifyRes;
 import model.Person;
 import model.Speech;
 
@@ -20,48 +16,40 @@ public class Test {
      * @throws ParseException 
      */
 	public static void main(String[] args) {
-		int ret = Constants.RETURN_FAIL;
+		int ret = -1;		
 		
 		// Create server
 		Client client = new Client("1ee0d9b01e8d92a155597785e0b7074e", "1ee0d9b01e8d92a155597785e0b7074e");
-		client.setServer("42.96.250.245", 81, "1", Constants.TEXT_DEPENDENT);
-	
+		client.setServer("openapi.shengwenyun.com", 80, "1", Constants.TEXT_DEPENDENT);
+		
 		// Create person
-		Person person = new Person(client, "123456789", "lixm");
+		Person person = new Person(client, "123456789", "test");
+		if ( (ret = person.create()) != Constants.RETURN_SUCCESS) {
+			System.err.println(person.getLastErr()+":"+String.valueOf(ret));
+			return;
+		}
 		
 		// Create Speech
-		Speech speech = new Speech("pcm/raw", 8000, true);
-		speech.setData(readWavform("./wav/0-9.11.wav"));
-		speech.setRule("*");
+		Speech speech = new Speech("pcm/raw", 8000, true);		
+		speech.setRule("123456789");
 		
-		// Create Person
-//		ret = person.create();
-		// Delete Person
-//		ret = person.delete();
-		// Get Information
-//		ret = person.getInfo(); System.out.println("Register:"+String.valueOf(person.getFlag()));
 		// Add Speech to person
-//		ret = person.addSpeech(speech);
-		// Remove all speeches from person
-//		ret = person.removeSpeeches();
+		for (String filepath : args) {
+			speech.setData(readWavform(filepath));		// readWavform是读文件到byte缓冲的函数
+			if ((ret = person.addSpeech(speech)) != Constants.RETURN_SUCCESS) {
+				System.err.println(person.getLastErr()+":"+String.valueOf(ret));
+				return;
+			}
+		}
+		
 		// Register voiceprint for speaker
-//		ret = client.registerVoiceprint(person); // asynchronize
-		// Update voiceprint for speaker
-//		ret = client.updateVoiceprint(person);	// asynchronize		
-		// Verify speaker's voiceprint;
-//		for(;;) {
-//		VerifyRes res = new VerifyRes();
-//		ret = client.verifyVoiceprint(person, speech, res); 		 
-//		System.out.println("Result:"+String.valueOf(res.getResult())+"\tSimilarity:"+String.valueOf(res.getSimilarity()));
-//		
-		VerifyRes res = new VerifyRes();
-		ret = client.identifyVoiceprint(person, speech, res);
-		System.out.println("Result:"+String.valueOf(res.getResult())+"\tSimilarity:"+String.valueOf(res.getSimilarity())
-				+"\tId:"+person.getId()+"\tName:"+person.getName());
-
-		System.out.println(person.getId() + ":" + String.valueOf(ret));
-		System.out.println(person.getId() + ":" + person.getLastErr() + ":" + client.getLastErr());
-//		}
+		if ((ret = client.registerVoiceprint(person)) != Constants.RETURN_SUCCESS) {
+			System.err.println(person.getLastErr()+":"+String.valueOf(ret));
+			return;
+		}
+		
+		// Output result
+		System.out.println(person.getId()+": Register voiceprint success.");
 	}
 	
 	public static byte[] readWavform(String filename) {
