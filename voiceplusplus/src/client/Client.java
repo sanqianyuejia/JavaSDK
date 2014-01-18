@@ -74,7 +74,7 @@ public class Client extends Object {
 
 		if (!person.getId().isEmpty()) {
 			JSONObject result = getClientService().clientVerifyVoiceprint(
-					person.getId(), speech.getCodec(), speech.getSampleRate(),
+					person.getId(), person.getName(), speech.getCodec(), speech.getSampleRate(),
 					speech.getVerify(), speech.getData());
 
 			if (!result.getBoolean(Constants.SUCCESS)) {

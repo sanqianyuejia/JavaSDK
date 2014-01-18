@@ -24,7 +24,7 @@ public class ClientService extends BaseService {
 		return tokenJson;
 	}
 	
-	public JSONObject clientVerifyVoiceprint(String id, String codec, int sr, boolean bVerify, byte[] data) {
+	public JSONObject clientVerifyVoiceprint(String id, String name, String codec, int sr, boolean bVerify, byte[] data) {
 		Map<String, String> parameters = new HashMap<String, String>();
 		parameters.put(Constants.API_KEY, super.getClient().getKey());
 		parameters.put(Constants.API_SECRET, super.getClient().getSecret());

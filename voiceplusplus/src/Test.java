@@ -17,13 +17,16 @@ public class Test {
      */
 	public static void main(String[] args) {
 		int ret = -1;		
+		String idString = "10000";			// 群组编号
+		String nameString = "test";			// 说话人别名，同一群组内必须唯一
+		String pwdString = "0123456789";	// 口令内容	
 		
 		// Create server
 		Client client = new Client("1ee0d9b01e8d92a155597785e0b7074e", "1ee0d9b01e8d92a155597785e0b7074e");
 		client.setServer("openapi.shengwenyun.com", 80, "1", Constants.TEXT_DEPENDENT);
 		
 		// Create person
-		Person person = new Person(client, "123456789", "test");
+		Person person = new Person(client, idString, nameString);
 		if ( (ret = person.create()) != Constants.RETURN_SUCCESS) {
 			System.err.println(person.getLastErr()+":"+String.valueOf(ret));
 			return;
@@ -31,7 +34,7 @@ public class Test {
 		
 		// Create Speech
 		Speech speech = new Speech("pcm/raw", 8000, true);		
-		speech.setRule("123456789");
+		speech.setRule(pwdString);
 		
 		// Add Speech to person
 		for (String filepath : args) {
@@ -49,7 +52,7 @@ public class Test {
 		}
 		
 		// Output result
-		System.out.println(person.getId()+": Register voiceprint success.");
+		System.out.println(person.getId()+"\t"+person.getName()+": Register voiceprint success.");
 	}
 	
 	public static byte[] readWavform(String filename) {
