@@ -238,4 +238,24 @@ public class Person extends Object {
 		
 		return ret;
 	}
+	
+	public int reserveSpeeches(int number) {
+		int ret = Constants.RETURN_SUCCESS;
+		
+		if (!this.id.isEmpty()) {
+			JSONObject result = getPersonService().personReserveSpeeches(this.id, this.name, number);			
+			
+			if (!result.getBoolean(Constants.SUCCESS)) {
+				ret = result.getInt(Constants.ERROR_CODE);
+				super.setLastErr(result.getString(Constants.ERROR));
+				super.setErrCode(ret);
+			}
+		} else {		
+			ret = Constants.LOCAL_ID_NULL;
+			super.setLastErr("id is empty");
+			super.setErrCode(0);
+		}
+		
+		return ret;
+	}
 }

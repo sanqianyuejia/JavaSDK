@@ -17,12 +17,12 @@ public class Test {
      */
 	public static void main(String[] args) {
 		int ret = -1;		
-		String idString = "10000";			// 群组编号
+		String idString = "10001";			// 群组编号
 		String nameString = "test";			// 说话人别名，同一群组内必须唯一
 		String pwdString = "0123456789";	// 口令内容	
 		
 		// Create server
-		Client client = new Client("1ee0d9b01e8d92a155597785e0b7074e", "1ee0d9b01e8d92a155597785e0b7074e");
+		Client client = new Client("1ee0d9b01e8d92a11117785e0b7074e", "1ee0d9b01e8d92a111197785e0b7074e");
 		client.setServer("openapi.shengwenyun.com", 80, "1", Constants.TEXT_DEPENDENT);
 		
 		// Create person

@@ -47,6 +47,7 @@ public class Constants {
     public static final String IDENTY = "identy";
     public static final String MD5 = "md5";
     public static final String NAME = "name";
+	public static final String NUMBER = "number";
     public static final String TAG = "tag";
     public static final String CODEC = "codec";
     public static final String SAMPLERATE = "sr";
@@ -73,6 +74,7 @@ public class Constants {
     public static final String URL_SPEECH_FIND_PERSON = "/speech/find_person.json";
     public static final String URL_SPEECH_DELETE = "/speech/delete.json";
     public static final String URL_SPEECH_DELETE_PERSON = "/speech/delete_person.json";
+    public static final String URL_SPEECH_RESERVE_SPEECHES = "/speech/reserve.json";
     
     public static final String URL_MODEL_REGISTER = "/model/train.json";
     public static final String URL_MODEL_VERIFY = "/model/verify.json";
