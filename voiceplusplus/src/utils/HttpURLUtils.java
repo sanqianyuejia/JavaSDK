@@ -60,8 +60,8 @@ public final class HttpURLUtils {
                         URL url = new URL(reqUrl);
                         urlConn = (HttpURLConnection) url.openConnection();
                         urlConn.setRequestMethod("POST");
-                        urlConn.setConnectTimeout(5000);// （单位：毫秒）jdk
-                        urlConn.setReadTimeout(5000);// （单位：毫秒）jdk 1.5换成这个,读操作超时
+                        urlConn.setConnectTimeout(10000);// （单位：毫秒）jdk
+                        urlConn.setReadTimeout(10000);// （单位：毫秒）jdk 1.5换成这个,读操作超时
                         urlConn.setDoOutput(true);
 
                         urlConn.setRequestProperty("connection", "keep-alive");

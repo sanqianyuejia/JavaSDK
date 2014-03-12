@@ -54,4 +54,46 @@ public class ClientService extends BaseService {
 		
 		return tokenJson;
 	}
+	
+	public JSONObject clientIdentifyVoiceprint_2(String id, String codec, int sr, byte[] data) {
+		Map<String, String> parameters = new HashMap<String, String>();
+		parameters.put(Constants.API_KEY, super.getClient().getKey());
+		parameters.put(Constants.API_SECRET, super.getClient().getSecret());
+		parameters.put(Constants.CODEC, codec);
+		parameters.put(Constants.SAMPLERATE, String.valueOf(sr));
+		parameters.put(Constants.ID, id);
+		
+		String tokenResult = HttpURLUtils.doUploadFile(super.getClient().getServerString()+Constants.URL_MODEL_IDENTIFY_2, parameters, 
+				Constants.FILEPARAM, "./testfile.wav", "multipart/form-data;", data);
+		JSONObject tokenJson = (JSONObject) JSONObject.fromObject(tokenResult);
+		
+		return tokenJson;
+	}
+	
+	public JSONObject clientIdentifyVoiceprint_3(String id, String codec, int sr, byte[] data) {
+		Map<String, String> parameters = new HashMap<String, String>();
+		parameters.put(Constants.API_KEY, super.getClient().getKey());
+		parameters.put(Constants.API_SECRET, super.getClient().getSecret());
+		parameters.put(Constants.CODEC, codec);
+		parameters.put(Constants.SAMPLERATE, String.valueOf(sr));
+		parameters.put(Constants.ID, id);
+		
+		String tokenResult = HttpURLUtils.doUploadFile(super.getClient().getServerString()+Constants.URL_MODEL_IDENTIFY_3, parameters, 
+				Constants.FILEPARAM, "./testfile.wav", "multipart/form-data;", data);
+		JSONObject tokenJson = (JSONObject) JSONObject.fromObject(tokenResult);
+		
+		return tokenJson;
+	}
+	
+	public JSONObject personFindAll(int limit) {
+		Map<String, String> parameters = new HashMap<String, String>();
+		parameters.put(Constants.API_KEY, super.getClient().getKey());
+		parameters.put(Constants.API_SECRET, super.getClient().getSecret());
+		parameters.put(Constants.PERSON_LIMIT, limit+"");
+		
+		String tokenResult = HttpURLUtils.doPost(super.getClient().getServerString()+Constants.URL_PERSON_FIND_ALL, parameters);
+		JSONObject tokenJson = (JSONObject) JSONObject.fromObject(tokenResult);
+		
+		return tokenJson;
+	}
 }

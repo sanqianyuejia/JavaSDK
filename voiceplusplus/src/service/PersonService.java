@@ -10,12 +10,13 @@ import utils.HttpURLUtils;
 
 public class PersonService extends BaseService {
 	
-	public JSONObject personCreate(String id, String name) {
+	public JSONObject personCreate(String id, String name, String tag) {
 		Map<String, String> parameters = new HashMap<String, String>();
 		parameters.put(Constants.API_KEY, super.getClient().getKey());
 		parameters.put(Constants.API_SECRET, super.getClient().getSecret());
 		parameters.put(Constants.ID, id);
 		parameters.put(Constants.NAME, name);
+		parameters.put(Constants.TAG, tag);
 		
 		String tokenResult = HttpURLUtils.doPost(super.getClient().getServerString()+Constants.URL_PERSON_CREATE, parameters);
 		JSONObject tokenJson = (JSONObject) JSONObject.fromObject(tokenResult);
@@ -36,11 +37,12 @@ public class PersonService extends BaseService {
 		return tokenJson;
 	}
 	
-	public JSONObject personGetInfo(String id) {
+	public JSONObject personGetInfo(String id, String name) {
 		Map<String, String> parameters = new HashMap<String, String>();
 		parameters.put(Constants.API_KEY, super.getClient().getKey());
 		parameters.put(Constants.API_SECRET, super.getClient().getSecret());
 		parameters.put(Constants.ID, id);
+		parameters.put(Constants.NAME, name);
 		
 		String tokenResult = HttpURLUtils.doPost(super.getClient().getServerString()+Constants.URL_PERSON_GETINFO, parameters);
 		JSONObject tokenJson = (JSONObject) JSONObject.fromObject(tokenResult);
@@ -92,13 +94,28 @@ public class PersonService extends BaseService {
 		return tokenJson;
 	}
 	
-	public JSONObject personGetSpeeches(String id) {
+	public JSONObject personGetSpeeches(String id, String name) {
 		Map<String, String> parameters = new HashMap<String, String>();
 		parameters.put(Constants.API_KEY, super.getClient().getKey());
 		parameters.put(Constants.API_SECRET, super.getClient().getSecret());
 		parameters.put(Constants.ID, id);
+		parameters.put(Constants.NAME, name);
 		
 		String tokenResult = HttpURLUtils.doPost(super.getClient().getServerString()+Constants.URL_SPEECH_FIND_PERSON, parameters);
+		JSONObject tokenJson = (JSONObject) JSONObject.fromObject(tokenResult);
+		
+		return tokenJson;
+	}
+	
+	public JSONObject personGetLogs(String id, String name, int limit) {
+		Map<String, String> parameters = new HashMap<String, String>();
+		parameters.put(Constants.API_KEY, super.getClient().getKey());
+		parameters.put(Constants.API_SECRET, super.getClient().getSecret());
+		parameters.put(Constants.ID, id);
+		parameters.put(Constants.NAME, name);
+		parameters.put(Constants.PERSON_LIMIT, String.valueOf(limit));
+		
+		String tokenResult = HttpURLUtils.doPost(super.getClient().getServerString()+Constants.URL_PERSON_FIND_LOGS, parameters);
 		JSONObject tokenJson = (JSONObject) JSONObject.fromObject(tokenResult);
 		
 		return tokenJson;
@@ -118,5 +135,4 @@ public class PersonService extends BaseService {
 		
 		return tokenJson;
 	}
-
 }

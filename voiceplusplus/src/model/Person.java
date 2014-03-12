@@ -96,7 +96,7 @@ public class Person extends Object {
 		int ret = Constants.RETURN_SUCCESS;
 		
 		if (!this.id.isEmpty()) {
-			JSONObject result = getPersonService().personCreate(this.id, this.name);			
+			JSONObject result = getPersonService().personCreate(this.id, this.name, this.getTag());			
 			
 			if (!result.getBoolean(Constants.SUCCESS)) {
 				ret = result.getInt(Constants.ERROR_CODE);
@@ -116,7 +116,7 @@ public class Person extends Object {
 		int ret = Constants.RETURN_SUCCESS;
 		
 		if (!this.id.isEmpty()) {
-			JSONObject result = getPersonService().personGetInfo(this.id);			
+			JSONObject result = getPersonService().personGetInfo(this.id, this.name);			
 			
 			if (!result.getBoolean(Constants.SUCCESS)) {
 				ret = result.getInt(Constants.ERROR_CODE);
@@ -129,6 +129,7 @@ public class Person extends Object {
 					this.setId(p.getString(Constants.IDENTY));
 					this.setName(p.getString(Constants.NAME));
 					this.setFlag(p.getBoolean(Constants.FLAG));
+					this.setTag(p.getString(Constants.TAG));
 				}
 			}
 		} else {		
@@ -146,7 +147,7 @@ public class Person extends Object {
 		int ret = Constants.RETURN_SUCCESS;
 		
 		if (!this.id.isEmpty()) {
-			JSONObject result = getPersonService().personGetSpeeches(this.id);
+			JSONObject result = getPersonService().personGetSpeeches(this.id, this.name);
 			
 			if (!result.getBoolean(Constants.SUCCESS)) {
 				ret = result.getInt(Constants.ERROR_CODE);
@@ -173,6 +174,36 @@ public class Person extends Object {
 		}
 		
 		return speechList;
+	}
+	
+	@Deprecated
+	public List<VerifyLog> getLogs(int limit) {
+		List<VerifyLog> logList = new ArrayList<VerifyLog>();
+		int ret = Constants.RETURN_SUCCESS;
+
+		JSONObject result = getPersonService().personGetLogs(this.id, this.name, limit);
+
+		if (!result.getBoolean(Constants.SUCCESS)) {
+			ret = result.getInt(Constants.ERROR_CODE);
+			super.setLastErr(result.getString(Constants.ERROR));
+			super.setErrCode(ret);
+		} else {
+			JSONArray logs = (JSONArray) result.getJSONArray("log");
+			Iterator<JSONObject> it = logs.iterator();
+			while (it.hasNext()) {
+				JSONObject object = (JSONObject) it.next();
+				VerifyLog log = new VerifyLog(); 
+				log.setId(object.getString(Constants.IDENTY));
+				log.setName(object.getString(Constants.NAME));
+				log.setScore((float)object.getDouble(Constants.SCORE));
+				log.setMatch(object.getBoolean(Constants.MATCH));
+				log.setUpdatetime(object.getString(Constants.UPDATE_TIME));
+
+				logList.add(log);
+			}
+		}
+
+		return logList;
 	}
 	
 	public int addSpeech(Speech speech) {

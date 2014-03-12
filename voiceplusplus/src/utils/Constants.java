@@ -63,11 +63,17 @@ public class Constants {
     public static final String ERROR_CODE = "error_code";
 	public static final String TRAIN_MODE = "mode";
 	public static final String SPEECH_RULE = "rule";
+	public static final String PERSON_LIMIT = "limit";
+	public static final String UPDATE_TIME = "updatetime";
+	public static final String MATCH = "match";
+	public static final String SCORE = "score";
     
     // server: http://192.168.1.253:8888/1/
     public static final String URL_PERSON_CREATE = "/person/create.json";
     public static final String URL_PERSON_DELETE = "/person/delete.json";
     public static final String URL_PERSON_GETINFO = "/person/find.json";
+    public static final String URL_PERSON_FIND_ALL = "/person/find_all.json";
+    public static final String URL_PERSON_FIND_LOGS = "/person/find_logs.json";
     
     public static final String URL_SPEECH_ADD = "/speech/add.json";
     public static final String URL_SPEECH_FIND = "/speech/find.json";
@@ -79,4 +85,6 @@ public class Constants {
     public static final String URL_MODEL_REGISTER = "/model/train.json";
     public static final String URL_MODEL_VERIFY = "/model/verify.json";
     public static final String URL_MODEL_IDENTIFY = "/model/identify.json";
+    public static final String URL_MODEL_IDENTIFY_2 = "/model/identify_2.json";
+    public static final String URL_MODEL_IDENTIFY_3 = "/model/identify_3.json";
 }

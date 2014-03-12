@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 
 import utils.Constants;
 import client.Client;
@@ -22,8 +23,8 @@ public class Test {
 		String pwdString = "0123456789";	// ¿ÚÁîÄÚÈÝ	
 		
 		// Create server
-		Client client = new Client("1ee0d9b01e8d92a11117785e0b7074e", "1ee0d9b01e8d92a111197785e0b7074e");
-		client.setServer("openapi.shengwenyun.com", 80, "1", Constants.TEXT_DEPENDENT);
+		Client client = new Client("1ee0d9b01e8d92a155597785e0b7074e", "1ee0d9b01e8d92a155597785e0b7074e");
+		client.setServer("115.28.177.226", 11638, "1", Constants.TEXT_DEPENDENT);
 		
 		// Create person
 		Person person = new Person(client, idString, nameString);

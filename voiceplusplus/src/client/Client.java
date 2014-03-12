@@ -1,5 +1,10 @@
 package client;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import service.ClientService;
 import utils.Constants;
@@ -60,6 +65,35 @@ public class Client extends Object {
 	public String getServerString() {
 		return this.server;
 	}
+	
+	@Deprecated
+	public List<Person> getPersons(int limit) {
+		List<Person> personList = new ArrayList<Person>();
+		int ret = Constants.RETURN_SUCCESS;
+
+		JSONObject result = getClientService().personFindAll(limit);
+
+		if (!result.getBoolean(Constants.SUCCESS)) {
+			ret = result.getInt(Constants.ERROR_CODE);
+			super.setLastErr(result.getString(Constants.ERROR));
+			super.setErrCode(ret);
+		} else {
+			JSONArray persons = (JSONArray) result.getJSONArray("person");
+			Iterator<JSONObject> it = persons.iterator();
+			while (it.hasNext()) {
+				JSONObject object = (JSONObject) it.next();
+				Person person = new Person(this); 
+				person.setId(object.getString(Constants.IDENTY));
+				person.setName(object.getString(Constants.NAME));
+				person.setTag(object.getString(Constants.TAG));
+				person.setFlag(object.getBoolean(Constants.FLAG));
+
+				personList.add(person);
+			}
+		}
+
+		return personList;
+	}
 
 	/**
 	 * Verify speaker's voiceprint
@@ -99,6 +133,48 @@ public class Client extends Object {
 		int ret = Constants.RETURN_SUCCESS;
 
 		JSONObject result = getClientService().clientIdentifyVoiceprint(person.getId(),
+				speech.getCodec(), speech.getSampleRate(), speech.getData());
+
+		if (!result.getBoolean(Constants.SUCCESS)) {
+			ret = result.getInt(Constants.ERROR_CODE);
+			super.setLastErr(result.getString(Constants.ERROR));
+			super.setErrCode(ret);
+		} else {
+			person.setId(result.getString(Constants.ID));
+			person.setName(result.getString(Constants.NAME));
+			res.setResult(result.getBoolean(Constants.RESULT));
+			res.setSimilarity(result.getDouble(Constants.SIMILARITY));
+		}
+
+		return ret;
+	}
+	
+	public synchronized int identifyVoiceprint_2(Person person, Speech speech,
+			VerifyRes res) {
+		int ret = Constants.RETURN_SUCCESS;
+
+		JSONObject result = getClientService().clientIdentifyVoiceprint_2(person.getId(),
+				speech.getCodec(), speech.getSampleRate(), speech.getData());
+
+		if (!result.getBoolean(Constants.SUCCESS)) {
+			ret = result.getInt(Constants.ERROR_CODE);
+			super.setLastErr(result.getString(Constants.ERROR));
+			super.setErrCode(ret);
+		} else {
+			person.setId(result.getString(Constants.ID));
+			person.setName(result.getString(Constants.NAME));
+			res.setResult(result.getBoolean(Constants.RESULT));
+			res.setSimilarity(result.getDouble(Constants.SIMILARITY));
+		}
+
+		return ret;
+	}
+	
+	public synchronized int identifyVoiceprint_3(Person person, Speech speech,
+			VerifyRes res) {
+		int ret = Constants.RETURN_SUCCESS;
+
+		JSONObject result = getClientService().clientIdentifyVoiceprint_3(person.getId(),
 				speech.getCodec(), speech.getSampleRate(), speech.getData());
 
 		if (!result.getBoolean(Constants.SUCCESS)) {
