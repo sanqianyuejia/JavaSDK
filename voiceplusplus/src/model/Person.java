@@ -27,6 +27,7 @@ public class Person extends Object {
 		this.client = client;
 		this.id = id;
 		this.name = name;
+		this.tag = "";
 	}
 	
 	public Person(Client client) {

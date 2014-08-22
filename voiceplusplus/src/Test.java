@@ -2,10 +2,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.List;
 
 import utils.Constants;
 import client.Client;
+import client.VerifyRes;
 import model.Person;
 import model.Speech;
 
@@ -20,40 +20,52 @@ public class Test {
 		int ret = -1;		
 		String idString = "10001";			// 群组编号
 		String nameString = "test";			// 说话人别名，同一群组内必须唯一
-		String pwdString = "0123456789";	// 口令内容	
+		String pwdString = "*";	// 口令内容	
 		
 		// Create server
-		Client client = new Client("1ee0d9b01e8d92a155597785e0b7074e", "1ee0d9b01e8d92a155597785e0b7074e");
-		client.setServer("115.28.177.226", 11638, "1", Constants.TEXT_DEPENDENT);
+		Client client = new Client("65e02ffc45b0d01bd09fa3e0e9fe1b14", "65e02ffc45b0d01bd09fa3e0e9fe1b14");
+		client.setServer("192.168.1.253", 11638, "1", Constants.TEXT_DEPENDENT);
 		
-		// Create person
+		// Create Person
 		Person person = new Person(client, idString, nameString);
-		if ( (ret = person.create()) != Constants.RETURN_SUCCESS) {
-			System.err.println(person.getLastErr()+":"+String.valueOf(ret));
-			return;
-		}
-		
-		// Create Speech
-		Speech speech = new Speech("pcm/raw", 8000, true);		
-		speech.setRule(pwdString);
-		
-		// Add Speech to person
-		for (String filepath : args) {
-			speech.setData(readWavform(filepath));		// readWavform是读文件到byte缓冲的函数
-			if ((ret = person.addSpeech(speech)) != Constants.RETURN_SUCCESS) {
+		if ( (ret = person.getInfo()) != Constants.RETURN_SUCCESS) {
+			if ( (ret = person.create()) != Constants.RETURN_SUCCESS) {
 				System.err.println(person.getLastErr()+":"+String.valueOf(ret));
-				return;
 			}
 		}
 		
-		// Register voiceprint for speaker
-		if ((ret = client.registerVoiceprint(person)) != Constants.RETURN_SUCCESS) {
+		// Create Speech
+		Speech speech = new Speech("pcm/raw", 16000, true);		
+		speech.setRule(pwdString);
+		
+		// Add Speech to person
+		if (person.getFlag() == false) {
+			for (String filepath : args) {
+				speech.setData(readWavform("wav/"+filepath));		// readWavform是读文件到byte缓冲的函数
+				if ((ret = person.addSpeech(speech)) != Constants.RETURN_SUCCESS) {
+					System.err.println(person.getLastErr()+":"+String.valueOf(ret));
+				}
+			}
+			
+			// Register voiceprint for speaker
+			if ((ret = client.registerVoiceprint(person)) != Constants.RETURN_SUCCESS) {
+				System.err.println(person.getLastErr()+":"+String.valueOf(ret));
+			}
+			
+			// Output result
+			System.out.println(person.getId()+"\t"+person.getName()+": Register voiceprint success.");
+		}
+		
+		// Verify voiceprint for speaker
+		VerifyRes res = new VerifyRes();
+		speech.setRule("5318"); 
+		speech.setData(readWavform("wav/ver_4digits_5318.wav"));
+		if ((ret = client.verifyVoiceprint(person, speech, res)) != Constants.RETURN_SUCCESS) {
 			System.err.println(person.getLastErr()+":"+String.valueOf(ret));
-			return;
 		}
 		
 		// Output result
-		System.out.println(person.getId()+"\t"+person.getName()+": Register voiceprint success.");
+		System.out.println(person.getId()+"\t"+person.getName()+": "+res.getResult()+"-"+res.getSimilarity());
 	}
 	
 	public static byte[] readWavform(String filename) {
