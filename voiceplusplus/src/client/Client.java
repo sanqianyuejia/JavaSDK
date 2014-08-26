@@ -154,28 +154,7 @@ public class Client extends Object {
 		int ret = Constants.RETURN_SUCCESS;
 
 		JSONObject result = getClientService().clientIdentifyVoiceprint_2(person.getId(),
-				speech.getCodec(), speech.getSampleRate(), speech.getData());
-
-		if (!result.getBoolean(Constants.SUCCESS)) {
-			ret = result.getInt(Constants.ERROR_CODE);
-			super.setLastErr(result.getString(Constants.ERROR));
-			super.setErrCode(ret);
-		} else {
-			person.setId(result.getString(Constants.ID));
-			person.setName(result.getString(Constants.NAME));
-			res.setResult(result.getBoolean(Constants.RESULT));
-			res.setSimilarity(result.getDouble(Constants.SIMILARITY));
-		}
-
-		return ret;
-	}
-	
-	public synchronized int identifyVoiceprint_3(Person person, Speech speech,
-			VerifyRes res) {
-		int ret = Constants.RETURN_SUCCESS;
-
-		JSONObject result = getClientService().clientIdentifyVoiceprint_3(person.getId(),
-				speech.getCodec(), speech.getSampleRate(), speech.getData());
+				speech.getCodec(),speech.getSampleRate(), speech.getVerify(), speech.getRule(), speech.getData());
 
 		if (!result.getBoolean(Constants.SUCCESS)) {
 			ret = result.getInt(Constants.ERROR_CODE);

@@ -23,11 +23,16 @@ public class Test {
 		String pwdString = "*";	// ¿ÚÁîÄÚÈÝ	
 		
 		// Create server
-		Client client = new Client("65e02ffc45b0d01bd09fa3e0e9fe1b14", "65e02ffc45b0d01bd09fa3e0e9fe1b14");
-		client.setServer("192.168.1.253", 11638, "1", Constants.TEXT_DEPENDENT);
+		Client client = new Client("26bf86dc87c11982ec9905ddce8dd6e8", "26bf86dc87c11982ec9905ddce8dd6e8");
+		client.setServer("127.0.0.1", 81, "1", Constants.TEXT_DEPENDENT);
+		
+		// Delete Person
+		Person person = new Person(client, idString, nameString);
+		if ((ret = person.delete()) != Constants.RETURN_SUCCESS) {
+			System.err.println(person.getLastErr()+":"+String.valueOf(ret));			
+		}
 		
 		// Create Person
-		Person person = new Person(client, idString, nameString);
 		if ( (ret = person.getInfo()) != Constants.RETURN_SUCCESS) {
 			if ( (ret = person.create()) != Constants.RETURN_SUCCESS) {
 				System.err.println(person.getLastErr()+":"+String.valueOf(ret));
@@ -58,9 +63,18 @@ public class Test {
 		
 		// Verify voiceprint for speaker
 		VerifyRes res = new VerifyRes();
-		speech.setRule("5318"); 
-		speech.setData(readWavform("wav/ver_4digits_5318.wav"));
+		speech.setRule("4752"); 
+		speech.setVerify(true);
+		speech.setData(readWavform("wav/imp_4digits_0475.wav"));
 		if ((ret = client.verifyVoiceprint(person, speech, res)) != Constants.RETURN_SUCCESS) {
+			System.err.println(person.getLastErr()+":"+String.valueOf(ret));
+		}
+		
+		// Output result
+		System.out.println(person.getId()+"\t"+person.getName()+": "+res.getResult()+"-"+res.getSimilarity());
+		
+		// Identify voiceprint for speaker
+		if ((ret = client.identifyVoiceprint_2(person, speech, res)) != Constants.RETURN_SUCCESS) {
 			System.err.println(person.getLastErr()+":"+String.valueOf(ret));
 		}
 		

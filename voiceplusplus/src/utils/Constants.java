@@ -86,5 +86,4 @@ public class Constants {
     public static final String URL_MODEL_VERIFY = "/model/verify.json";
     public static final String URL_MODEL_IDENTIFY = "/model/identify.json";
     public static final String URL_MODEL_IDENTIFY_2 = "/model/identify_2.json";
-    public static final String URL_MODEL_IDENTIFY_3 = "/model/identify_3.json";
 }
