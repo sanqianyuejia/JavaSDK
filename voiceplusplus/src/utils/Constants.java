@@ -5,6 +5,10 @@ public class Constants {
 	public static final int TEXT_INDEPENDENT = 1;
 	public static final int TEXT_PROMPT = 2;	
 	
+	public static final int VOICEPRINT_TYPE_RANDOM_DIGITS = 0;
+	public static final int VOICEPRINT_TYPE_FIXED_TEXT = 1;
+	public static final int VOICEPRINT_TYPE_RANDOM_TEXT = 2;
+	
 	public static final String TEXT_DEPENDENT_STR = "dependent";
 	public static final String TEXT_INDEPENDENT_STR = "independent";
 	public static final String TEXT_PROMPT_STR = "prompt";
@@ -67,6 +71,11 @@ public class Constants {
 	public static final String UPDATE_TIME = "updatetime";
 	public static final String MATCH = "match";
 	public static final String SCORE = "score";
+	public static final String PASSTYPE = "passtype";
+	public static final String STEP = "step";
+	public static final String RSTEPS = "rnumber";
+	public static final String VSTEPS = "vnumber";
+	public static final String AUTHCODE = "authcode";
     
     // server: http://192.168.1.253:8888/1/
     public static final String URL_PERSON_CREATE = "/person/create.json";
@@ -74,6 +83,7 @@ public class Constants {
     public static final String URL_PERSON_GETINFO = "/person/find.json";
     public static final String URL_PERSON_FIND_ALL = "/person/find_all.json";
     public static final String URL_PERSON_FIND_LOGS = "/person/find_logs.json";
+    public static final String URL_PERSON_GET_AUHCODE = "/person/getauthcode.json";
     
     public static final String URL_SPEECH_ADD = "/speech/add.json";
     public static final String URL_SPEECH_FIND = "/speech/find.json";
@@ -86,4 +96,6 @@ public class Constants {
     public static final String URL_MODEL_VERIFY = "/model/verify.json";
     public static final String URL_MODEL_IDENTIFY = "/model/identify.json";
     public static final String URL_MODEL_IDENTIFY_2 = "/model/identify_2.json";
+    
+    public static final String URL_SYSTEM_GETINFO = "/system/getinfo.json";
 }

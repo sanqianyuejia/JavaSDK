@@ -23,11 +23,15 @@ public class Test {
 		String pwdString = "*";	// 口令内容	
 		
 		// Create server
-		Client client = new Client("fd80fa1b9077742eaa517986baff0c00", "fd80fa1b9077742eaa517986baff0c00");
-		client.setServer("127.0.0.1", 81, "1", Constants.TEXT_DEPENDENT);
+		Client client = new Client("65e02ffc45b0d01bd09fa3e0e9fe1b14", "65e02ffc45b0d01bd09fa3e0e9fe1b14");
+		client.setServer("127.0.0.1", 11638, "1", Constants.TEXT_DEPENDENT);
+		if ((ret = client.getSysInfo(Constants.VOICEPRINT_TYPE_RANDOM_DIGITS)) != Constants.RETURN_SUCCESS) {
+			System.err.println(client.getLastErr()+":"+String.valueOf(ret));			
+		}
 		
 		// Delete Person
 		Person person = new Person(client, idString, nameString);
+		person.setPassType(Constants.VOICEPRINT_TYPE_RANDOM_DIGITS);	// 随机数字口令
 		if ((ret = person.delete()) != Constants.RETURN_SUCCESS) {
 			System.err.println(person.getLastErr()+":"+String.valueOf(ret));			
 		}
@@ -44,13 +48,19 @@ public class Test {
 		speech.setRule(pwdString);
 		
 		// Add Speech to person
-		if (person.getFlag() == false) {
+		if ( (ret = person.getInfo()) != Constants.RETURN_SUCCESS) {
+			System.err.println(person.getLastErr()+":"+String.valueOf(ret));
+		} else if (person.getFlag() == false) {
+			System.out.println(person.getId()+"\t"+person.getName()+"\t"+person.getStep()+"/"+client.getRegSteps());
 			for (String filepath : args) {
-				String strRule = filepath.substring(filepath.length()-8, filepath.length()-4);
-				speech.setRule(strRule);
-				speech.setData(readWavform("wav/"+filepath));		// readWavform是读文件到byte缓冲的函数
-				if ((ret = person.addSpeech(speech)) != Constants.RETURN_SUCCESS) {
+				if ( (ret = person.getAuthCode()) != Constants.RETURN_SUCCESS) {
 					System.err.println(person.getLastErr()+":"+String.valueOf(ret));
+				} else {
+					speech.setRule(person.getAuthCodeString());
+					speech.setData(readWavform("wav/"+filepath));		// readWavform是读文件到byte缓冲的函数
+					if ((ret = person.addSpeech(speech)) != Constants.RETURN_SUCCESS) {
+						System.err.println(person.getLastErr()+":"+String.valueOf(ret));
+					}
 				}
 			}
 			

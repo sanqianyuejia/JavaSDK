@@ -9,6 +9,18 @@ import net.sf.json.JSONObject;
 
 public class ClientService extends BaseService {
 	
+	public JSONObject clientGetSysInfo(int passtype) {
+		Map<String, String> parameters = new HashMap<String, String>();
+		parameters.put(Constants.API_KEY, super.getClient().getKey());
+		parameters.put(Constants.API_SECRET, super.getClient().getSecret());
+		parameters.put(Constants.PASSTYPE, String.valueOf(passtype));
+		
+		String tokenResult = HttpURLUtils.doPost(super.getClient().getServerString()+Constants.URL_SYSTEM_GETINFO, parameters);
+		JSONObject tokenJson = (JSONObject) JSONObject.fromObject(tokenResult);
+		
+		return tokenJson;
+	}
+	
 	public JSONObject clientRegisterVoiceprint(String id, String name, boolean bUpdate) {
 		Map<String, String> parameters = new HashMap<String, String>();
 		parameters.put(Constants.API_KEY, super.getClient().getKey());

@@ -18,6 +18,8 @@ public class Client extends Object {
 	private String secret;
 	private String version;
 	private int type;
+	private int reg_steps;
+	private int ver_steps;
 	private String server;
 
 	private ClientService cs;
@@ -35,6 +37,8 @@ public class Client extends Object {
 	public Client(String key, String secret) {
 		this.key = key;
 		this.secret = secret;
+		this.reg_steps = 10;
+		this.ver_steps = 2;
 	}
 
 	public ClientService getClientService() {
@@ -64,6 +68,26 @@ public class Client extends Object {
 
 	public String getServerString() {
 		return this.server;
+	}
+	
+	public int getSysInfo(int type) {
+		int ret = Constants.RETURN_SUCCESS;
+		
+		JSONObject result = getClientService().clientGetSysInfo(type);			
+		if (!result.getBoolean(Constants.SUCCESS)) {
+			ret = result.getInt(Constants.ERROR_CODE);
+			super.setLastErr(result.getString(Constants.ERROR));
+			super.setErrCode(result.getInt(Constants.ERROR_CODE));
+		} else {
+			JSONArray authcode = (JSONArray) result.getJSONArray("authcode");
+			if (authcode.size() > 0) {
+				JSONObject p = (JSONObject) authcode.get(0);
+				this.setRegSteps(p.getInt(Constants.RSTEPS));
+				this.setVerSteps(p.getInt(Constants.VSTEPS));
+			}
+		}
+				
+		return ret;
 	}
 	
 	@Deprecated
@@ -231,6 +255,14 @@ public class Client extends Object {
 	public String getSecret() {
 		return this.secret;
 	}
+	
+	public int getRegSteps() {
+		return this.reg_steps;
+	}
+	
+	public int getVerSteps() {
+		return this.ver_steps;
+	}
 
 	public void setKey(String key) {
 		this.key = key;
@@ -242,6 +274,14 @@ public class Client extends Object {
 
 	public void setType(int type) {
 		this.type = type;
+	}
+	
+	private void setRegSteps(int steps) {
+		this.reg_steps = steps;
+	}
+	
+	private void setVerSteps(int steps) {
+		this.ver_steps = steps;
 	}
 
 	public String getType() {

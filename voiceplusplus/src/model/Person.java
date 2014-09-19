@@ -19,7 +19,10 @@ public class Person extends Object {
 	private String id;
 	private String name;
 	private String tag;
+	private String authcode;
 	private boolean flag;
+	private int step;
+	private int passtype;
 	
 	private PersonService ps;
 	
@@ -28,6 +31,9 @@ public class Person extends Object {
 		this.id = id;
 		this.name = name;
 		this.tag = "";
+		this.authcode = "";
+		this.step = 0;
+		this.passtype = 0;	// DEFAULT DIGITS
 	}
 	
 	public Person(Client client) {
@@ -56,8 +62,21 @@ public class Person extends Object {
 	public String getTag() {
 		return this.tag;
 	}
+	
+	public String getAuthCodeString() {
+		return this.authcode;
+	}
+	
 	public boolean getFlag() {
 		return this.flag;
+	}
+	
+	public int getPassType() {
+		return this.passtype;
+	}
+	
+	public int getStep() {
+		return this.step;
 	}
 	
 	public void setId(String id) {
@@ -69,8 +88,21 @@ public class Person extends Object {
 	public void setTag(String tag) {
 		this.tag = tag;
 	}
+	
+	private void setAuthCodeString(String code) {
+		this.authcode = code;
+	}
+	
 	public void setFlag(boolean flag) {
 		this.flag = flag;
+	}
+	
+	public void setPassType(int passtype) {
+		this.passtype = passtype;
+	}
+	
+	public void setStep(int step) {
+		this.step = step;
 	}
 	
 	public int delete() {
@@ -97,7 +129,7 @@ public class Person extends Object {
 		int ret = Constants.RETURN_SUCCESS;
 		
 		if (!this.id.isEmpty()) {
-			JSONObject result = getPersonService().personCreate(this.id, this.name, this.tag);			
+			JSONObject result = getPersonService().personCreate(this.id, this.name, this.tag, this.passtype);			
 			
 			if (!result.getBoolean(Constants.SUCCESS)) {
 				ret = result.getInt(Constants.ERROR_CODE);
@@ -130,8 +162,31 @@ public class Person extends Object {
 					this.setId(p.getString(Constants.IDENTY));
 					this.setName(p.getString(Constants.NAME));
 					this.setFlag(p.getBoolean(Constants.FLAG));
+					this.setStep(p.getInt(Constants.STEP));
 					this.setTag(p.getString(Constants.TAG));
 				}
+			}
+		} else {		
+			ret = Constants.LOCAL_ID_NULL;
+			super.setLastErr("id is empty");
+			super.setErrCode(0);
+		}		
+		
+		return ret;
+	}
+	
+	public int getAuthCode() {
+		int ret = Constants.RETURN_SUCCESS;
+		
+		if (!this.id.isEmpty()) {
+			JSONObject result = getPersonService().personGetAuthCode(this.id, this.name);
+			
+			if (!result.getBoolean(Constants.SUCCESS)) {
+				ret = result.getInt(Constants.ERROR_CODE);
+				super.setLastErr(result.getString(Constants.ERROR));
+				super.setErrCode(result.getInt(Constants.ERROR_CODE));
+			} else {
+					this.setAuthCodeString(result.getString(Constants.AUTHCODE));
 			}
 		} else {		
 			ret = Constants.LOCAL_ID_NULL;

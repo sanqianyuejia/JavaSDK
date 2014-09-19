@@ -3,20 +3,20 @@ package service;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import utils.Constants;
 import utils.HttpURLUtils;
 
 public class PersonService extends BaseService {
 	
-	public JSONObject personCreate(String id, String name, String tag) {
+	public JSONObject personCreate(String id, String name, String tag, int passtype) {
 		Map<String, String> parameters = new HashMap<String, String>();
 		parameters.put(Constants.API_KEY, super.getClient().getKey());
 		parameters.put(Constants.API_SECRET, super.getClient().getSecret());
 		parameters.put(Constants.ID, id);
 		parameters.put(Constants.NAME, name);
 		parameters.put(Constants.TAG, tag);
+		parameters.put(Constants.PASSTYPE, String.valueOf(passtype));	// DEFAULT ONLY SUPPORT DIGITS  
 		
 		String tokenResult = HttpURLUtils.doPost(super.getClient().getServerString()+Constants.URL_PERSON_CREATE, parameters);
 		JSONObject tokenJson = (JSONObject) JSONObject.fromObject(tokenResult);
@@ -45,6 +45,19 @@ public class PersonService extends BaseService {
 		parameters.put(Constants.NAME, name);
 		
 		String tokenResult = HttpURLUtils.doPost(super.getClient().getServerString()+Constants.URL_PERSON_GETINFO, parameters);
+		JSONObject tokenJson = (JSONObject) JSONObject.fromObject(tokenResult);
+		
+		return tokenJson;
+	}
+	
+	public JSONObject personGetAuthCode(String id, String name) {
+		Map<String, String> parameters = new HashMap<String, String>();
+		parameters.put(Constants.API_KEY, super.getClient().getKey());
+		parameters.put(Constants.API_SECRET, super.getClient().getSecret());
+		parameters.put(Constants.ID, id);
+		parameters.put(Constants.NAME, name);
+		
+		String tokenResult = HttpURLUtils.doPost(super.getClient().getServerString()+Constants.URL_PERSON_GET_AUHCODE, parameters);
 		JSONObject tokenJson = (JSONObject) JSONObject.fromObject(tokenResult);
 		
 		return tokenJson;
