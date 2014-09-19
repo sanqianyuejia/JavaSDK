@@ -18,12 +18,12 @@ public class Test {
      */
 	public static void main(String[] args) {
 		int ret = -1;		
-		String idString = "10001";			// 群组编号
+		String idString = "1e24cf708a14ce81";			// 群组编号
 		String nameString = "test";			// 说话人别名，同一群组内必须唯一
 		String pwdString = "*";	// 口令内容	
 		
 		// Create server
-		Client client = new Client("26bf86dc87c11982ec9905ddce8dd6e8", "26bf86dc87c11982ec9905ddce8dd6e8");
+		Client client = new Client("fd80fa1b9077742eaa517986baff0c00", "fd80fa1b9077742eaa517986baff0c00");
 		client.setServer("127.0.0.1", 81, "1", Constants.TEXT_DEPENDENT);
 		
 		// Delete Person
@@ -46,6 +46,8 @@ public class Test {
 		// Add Speech to person
 		if (person.getFlag() == false) {
 			for (String filepath : args) {
+				String strRule = filepath.substring(filepath.length()-8, filepath.length()-4);
+				speech.setRule(strRule);
 				speech.setData(readWavform("wav/"+filepath));		// readWavform是读文件到byte缓冲的函数
 				if ((ret = person.addSpeech(speech)) != Constants.RETURN_SUCCESS) {
 					System.err.println(person.getLastErr()+":"+String.valueOf(ret));
@@ -63,11 +65,10 @@ public class Test {
 		
 		// Verify voiceprint for speaker
 		VerifyRes res = new VerifyRes();
-		speech.setRule("4752"); 
-		speech.setVerify(true);
-		speech.setData(readWavform("wav/imp_4digits_0475.wav"));
+		speech.setRule("5318"); 
+		speech.setData(readWavform("wav/ver_4digits_5318.wav"));
 		if ((ret = client.verifyVoiceprint(person, speech, res)) != Constants.RETURN_SUCCESS) {
-			System.err.println(person.getLastErr()+":"+String.valueOf(ret));
+			System.err.println(client.getLastErr()+":"+String.valueOf(ret));
 		}
 		
 		// Output result
@@ -75,7 +76,7 @@ public class Test {
 		
 		// Identify voiceprint for speaker
 		if ((ret = client.identifyVoiceprint_2(person, speech, res)) != Constants.RETURN_SUCCESS) {
-			System.err.println(person.getLastErr()+":"+String.valueOf(ret));
+			System.err.println(client.getLastErr()+":"+String.valueOf(ret));
 		}
 		
 		// Output result

@@ -97,7 +97,7 @@ public class Person extends Object {
 		int ret = Constants.RETURN_SUCCESS;
 		
 		if (!this.id.isEmpty()) {
-			JSONObject result = getPersonService().personCreate(this.id, this.name, this.getTag());			
+			JSONObject result = getPersonService().personCreate(this.id, this.name, this.tag);			
 			
 			if (!result.getBoolean(Constants.SUCCESS)) {
 				ret = result.getInt(Constants.ERROR_CODE);
