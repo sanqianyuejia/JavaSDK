@@ -18,16 +18,13 @@ public class Test {
      */
 	public static void main(String[] args) {
 		int ret = -1;		
-		String idString = "1e24cf708a14ce81";			// 群组编号
-		String nameString = "test";			// 说话人别名，同一群组内必须唯一
+		String idString = "6db60c3d588f3f40";			// 群组编号
+		String nameString = "lixm";			// 说话人别名，同一群组内必须唯一
 		String pwdString = "*";	// 口令内容	
 		
 		// Create server
-		Client client = new Client("65e02ffc45b0d01bd09fa3e0e9fe1b14", "65e02ffc45b0d01bd09fa3e0e9fe1b14");
-		client.setServer("127.0.0.1", 11638, "1", Constants.TEXT_DEPENDENT);
-		if ((ret = client.getSysInfo(Constants.VOICEPRINT_TYPE_RANDOM_DIGITS)) != Constants.RETURN_SUCCESS) {
-			System.err.println(client.getLastErr()+":"+String.valueOf(ret));			
-		}
+		Client client = new Client("53de3f4d0d34cb2f86d01d0cfd21f138", "53de3f4d0d34cb2f86d01d0cfd21f138");
+		client.setServer("114.215.103.99", 11638, "1", Constants.TEXT_DEPENDENT);
 		
 		// Delete Person
 		Person person = new Person(client, idString, nameString);
@@ -41,6 +38,11 @@ public class Test {
 			if ( (ret = person.create()) != Constants.RETURN_SUCCESS) {
 				System.err.println(person.getLastErr()+":"+String.valueOf(ret));
 			}
+		}
+		
+		// 获取person对应的系统信息
+		if ((ret = client.getSysInfo(person)) != Constants.RETURN_SUCCESS) {
+			System.err.println(client.getLastErr()+":"+String.valueOf(ret));			
 		}
 		
 		// Create Speech
@@ -66,7 +68,7 @@ public class Test {
 			
 			// Register voiceprint for speaker
 			if ((ret = client.registerVoiceprint(person)) != Constants.RETURN_SUCCESS) {
-				System.err.println(person.getLastErr()+":"+String.valueOf(ret));
+				System.err.println(client.getLastErr()+":"+String.valueOf(ret));
 			}
 			
 			// Output result
