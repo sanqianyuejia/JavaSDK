@@ -1,4 +1,4 @@
-package model;
+package com.kuaishangtong.model;
 
 public class VerifyLog {
 	private String identy;

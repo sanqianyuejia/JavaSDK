@@ -1,6 +1,6 @@
-package service;
+package com.kuaishangtong.service;
 
-import client.Client;
+import com.kuaishangtong.client.Client;
 
 public class BaseService {
 	private Client client;

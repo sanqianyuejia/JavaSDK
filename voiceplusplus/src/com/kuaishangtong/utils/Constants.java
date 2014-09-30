@@ -1,17 +1,9 @@
-package utils;
+package com.kuaishangtong.utils;
 
-public class Constants {
-	public static final int TEXT_DEPENDENT = 0;
-	public static final int TEXT_INDEPENDENT = 1;
-	public static final int TEXT_PROMPT = 2;	
-	
+public class Constants {	
 	public static final int VOICEPRINT_TYPE_RANDOM_DIGITS = 0;
 	public static final int VOICEPRINT_TYPE_FIXED_TEXT = 1;
 	public static final int VOICEPRINT_TYPE_RANDOM_TEXT = 2;
-	
-	public static final String TEXT_DEPENDENT_STR = "dependent";
-	public static final String TEXT_INDEPENDENT_STR = "independent";
-	public static final String TEXT_PROMPT_STR = "prompt";
 	
 	public static final int RETURN_SUCCESS = 0;
 	public static final int RETURN_FAIL = 1;
@@ -82,8 +74,10 @@ public class Constants {
     public static final String URL_PERSON_DELETE = "/person/delete.json";
     public static final String URL_PERSON_GETINFO = "/person/find.json";
     public static final String URL_PERSON_FIND_ALL = "/person/find_all.json";
+    public static final String URL_PERSON_FIND_GROUP = "/person/find_group.json";
     public static final String URL_PERSON_FIND_LOGS = "/person/find_logs.json";
     public static final String URL_PERSON_GET_AUHCODE = "/person/getauthcode.json";
+    public static final String URL_PERSON_GET_IDENTIFY_AUHCODE = "/person/getidentifycode.json";
     
     public static final String URL_SPEECH_ADD = "/speech/add.json";
     public static final String URL_SPEECH_FIND = "/speech/find.json";

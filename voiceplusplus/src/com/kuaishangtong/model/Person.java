@@ -1,17 +1,17 @@
-package model;
+package com.kuaishangtong.model;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 
-import client.Client;
-import service.PersonService;
-import utils.Constants;
-import model.Speech;
-import Object.Object;
+import com.kuaishangtong.client.Client;
+import com.kuaishangtong.service.PersonService;
+import com.kuaishangtong.utils.Constants;
+import com.kuaishangtong.model.Speech;
+import com.kuaishangtong.Object.Object;
 
 
 public class Person extends Object {
@@ -112,7 +112,7 @@ public class Person extends Object {
 			JSONObject result = getPersonService().personRemove(this.id, this.name);
 			
 			if (!result.getBoolean(Constants.SUCCESS)) {
-				ret = result.getInt(Constants.ERROR_CODE);
+				ret = result.getIntValue(Constants.ERROR_CODE);
 				super.setLastErr(result.getString(Constants.ERROR));
 				super.setErrCode(ret);
 			}
@@ -132,7 +132,7 @@ public class Person extends Object {
 			JSONObject result = getPersonService().personCreate(this.id, this.name, this.tag, this.passtype);			
 			
 			if (!result.getBoolean(Constants.SUCCESS)) {
-				ret = result.getInt(Constants.ERROR_CODE);
+				ret = result.getIntValue(Constants.ERROR_CODE);
 				super.setLastErr(result.getString(Constants.ERROR));
 				super.setErrCode(ret);
 			}
@@ -152,9 +152,9 @@ public class Person extends Object {
 			JSONObject result = getPersonService().personGetInfo(this.id, this.name);			
 			
 			if (!result.getBoolean(Constants.SUCCESS)) {
-				ret = result.getInt(Constants.ERROR_CODE);
+				ret = result.getIntValue(Constants.ERROR_CODE);
 				super.setLastErr(result.getString(Constants.ERROR));
-				super.setErrCode(result.getInt(Constants.ERROR_CODE));
+				super.setErrCode(result.getIntValue(Constants.ERROR_CODE));
 			} else {
 				JSONArray person = (JSONArray) result.getJSONArray("person");
 				if (person.size() > 0) {
@@ -162,7 +162,7 @@ public class Person extends Object {
 					this.setId(p.getString(Constants.IDENTY));
 					this.setName(p.getString(Constants.NAME));
 					this.setFlag(p.getBoolean(Constants.FLAG));
-					this.setStep(p.getInt(Constants.STEP));
+					this.setStep(p.getIntValue(Constants.STEP));
 					this.setTag(p.getString(Constants.TAG));
 				}
 			}
@@ -182,9 +182,9 @@ public class Person extends Object {
 			JSONObject result = getPersonService().personGetAuthCode(this.id, this.name);
 			
 			if (!result.getBoolean(Constants.SUCCESS)) {
-				ret = result.getInt(Constants.ERROR_CODE);
+				ret = result.getIntValue(Constants.ERROR_CODE);
 				super.setLastErr(result.getString(Constants.ERROR));
-				super.setErrCode(result.getInt(Constants.ERROR_CODE));
+				super.setErrCode(result.getIntValue(Constants.ERROR_CODE));
 			} else {
 					this.setAuthCodeString(result.getString(Constants.AUTHCODE));
 			}
@@ -197,6 +197,28 @@ public class Person extends Object {
 		return ret;
 	}
 	
+	public int getIdentifyAuthCode() {
+		int ret = Constants.RETURN_SUCCESS;
+		
+		if (!this.id.isEmpty()) {
+			JSONObject result = getPersonService().personGetIdentifyAuthCode(this.passtype);
+			
+			if (!result.getBoolean(Constants.SUCCESS)) {
+				ret = result.getIntValue(Constants.ERROR_CODE);
+				super.setLastErr(result.getString(Constants.ERROR));
+				super.setErrCode(result.getIntValue(Constants.ERROR_CODE));
+			} else {
+					this.setAuthCodeString(result.getString(Constants.AUTHCODE));
+			}
+		} else {		
+			ret = Constants.LOCAL_ID_NULL;
+			super.setLastErr("id is empty");
+			super.setErrCode(0);
+		}		
+		
+		return ret;
+	}  
+	
 	@Deprecated
 	public List<Speech> getSpeeches() {
 		List<Speech> speechList = new ArrayList<Speech>();
@@ -206,18 +228,18 @@ public class Person extends Object {
 			JSONObject result = getPersonService().personGetSpeeches(this.id, this.name);
 			
 			if (!result.getBoolean(Constants.SUCCESS)) {
-				ret = result.getInt(Constants.ERROR_CODE);
+				ret = result.getIntValue(Constants.ERROR_CODE);
 				super.setLastErr(result.getString(Constants.ERROR));
 				super.setErrCode(ret);
 			} else {
 				JSONArray speeches = (JSONArray) result.getJSONArray("speech");
-				Iterator<JSONObject> it = speeches.iterator();
+				Iterator<java.lang.Object> it = speeches.iterator();
 				while (it.hasNext()) {
 					JSONObject object = (JSONObject) it.next();
 					Speech speech = new Speech();
 					speech.setId(object.getString(Constants.IDENTY));
 					speech.setMD5(object.getString(Constants.MD5));
-					speech.setSampleRate(object.getInt(Constants.SAMPLE_RATE));
+					speech.setSampleRate(object.getIntValue(Constants.SAMPLE_RATE));
 					speech.setCodec(object.getString(Constants.CODEC));
 					
 					speechList.add(speech);
@@ -240,18 +262,18 @@ public class Person extends Object {
 		JSONObject result = getPersonService().personGetLogs(this.id, this.name, limit);
 
 		if (!result.getBoolean(Constants.SUCCESS)) {
-			ret = result.getInt(Constants.ERROR_CODE);
+			ret = result.getIntValue(Constants.ERROR_CODE);
 			super.setLastErr(result.getString(Constants.ERROR));
 			super.setErrCode(ret);
 		} else {
 			JSONArray logs = (JSONArray) result.getJSONArray("log");
-			Iterator<JSONObject> it = logs.iterator();
+			Iterator<java.lang.Object> it = logs.iterator();
 			while (it.hasNext()) {
 				JSONObject object = (JSONObject) it.next();
 				VerifyLog log = new VerifyLog(); 
 				log.setId(object.getString(Constants.IDENTY));
 				log.setName(object.getString(Constants.NAME));
-				log.setScore((float)object.getDouble(Constants.SCORE));
+				log.setScore((float)object.getDoubleValue(Constants.SCORE));
 				log.setMatch(object.getBoolean(Constants.MATCH));
 				log.setUpdatetime(object.getString(Constants.UPDATE_TIME));
 
@@ -267,10 +289,10 @@ public class Person extends Object {
 		
 		if (!this.id.isEmpty()) {
 			JSONObject result = getPersonService().personAddSpeech(this.id, this.name, speech.getCodec(), 
-					speech.getSampleRate(), speech.getVerify(), speech.getRule(), speech.getData());
+					speech.getSampleRate(), speech.getVerify(), speech.getRule(), speech.getData(), this.passtype);
 			
 			if (!result.getBoolean(Constants.SUCCESS)) {
-				ret = result.getInt(Constants.ERROR_CODE);
+				ret = result.getIntValue(Constants.ERROR_CODE);
 				super.setLastErr(result.getString(Constants.ERROR));
 				super.setErrCode(ret);
 			} else {
@@ -292,7 +314,7 @@ public class Person extends Object {
 			JSONObject result = getPersonService().personRemoveSpeeches(this.id, this.name);			
 			
 			if (!result.getBoolean(Constants.SUCCESS)) {
-				ret = result.getInt(Constants.ERROR_CODE);
+				ret = result.getIntValue(Constants.ERROR_CODE);
 				super.setLastErr(result.getString(Constants.ERROR));
 				super.setErrCode(ret);
 			}
@@ -313,7 +335,7 @@ public class Person extends Object {
 			JSONObject result = getPersonService().personRemoveSpeech(speech.getMD5());
 			
 			if (!result.getBoolean(Constants.SUCCESS)) {
-				ret = result.getInt(Constants.ERROR_CODE);
+				ret = result.getIntValue(Constants.ERROR_CODE);
 				super.setLastErr(result.getString(Constants.ERROR));
 				super.setErrCode(ret);
 			}
@@ -333,7 +355,7 @@ public class Person extends Object {
 			JSONObject result = getPersonService().personReserveSpeeches(this.id, this.name, number);			
 			
 			if (!result.getBoolean(Constants.SUCCESS)) {
-				ret = result.getInt(Constants.ERROR_CODE);
+				ret = result.getIntValue(Constants.ERROR_CODE);
 				super.setLastErr(result.getString(Constants.ERROR));
 				super.setErrCode(ret);
 			}

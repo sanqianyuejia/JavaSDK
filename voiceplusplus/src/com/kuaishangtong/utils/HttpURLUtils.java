@@ -1,4 +1,4 @@
-package utils;
+package com.kuaishangtong.utils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -14,9 +14,6 @@ import java.util.Iterator;
 import java.util.Map;
 
 public final class HttpURLUtils {
-
-        public static void main(String[] args) {
-        }
 
         public static String doPost(String reqUrl, Map<String, String> parameters) {
                 HttpURLConnection urlConn = null;

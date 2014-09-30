@@ -1,4 +1,4 @@
-package client;
+package com.kuaishangtong.client;
 
 public class VerifyRes {
 	private boolean result;

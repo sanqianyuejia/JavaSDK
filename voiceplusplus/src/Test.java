@@ -3,11 +3,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import utils.Constants;
-import client.Client;
-import client.VerifyRes;
-import model.Person;
-import model.Speech;
+import com.kuaishangtong.utils.Constants;
+import com.kuaishangtong.client.Client;
+import com.kuaishangtong.client.VerifyRes;
+import com.kuaishangtong.model.Person;
+import com.kuaishangtong.model.Speech;
 
 public class Test {
 	
@@ -17,44 +17,45 @@ public class Test {
      * @throws ParseException 
      */
 	public static void main(String[] args) {
-		int ret = -1;		
-		String idString = "6db60c3d588f3f40";			// 群组编号
-		String nameString = "lixm";			// 说话人别名，同一群组内必须唯一
-		String pwdString = "*";	// 口令内容	
+		int ret 			= -1;		
+		String idString 	= "632cd5c21aa8dcc0";	// 群组编号
+		String nameString 	= "ipanel";				// 说话人别名，同一群组内必须唯一
 		
-		// Create server
-		Client client = new Client("53de3f4d0d34cb2f86d01d0cfd21f138", "53de3f4d0d34cb2f86d01d0cfd21f138");
-		client.setServer("114.215.103.99", 11638, "1", Constants.TEXT_DEPENDENT);
+		// 创建服务器实例
+		Client client = new Client("5aac06153cda21f07aa28269a505c565", "5aac06153cda21f07aa28269a505c565");
+		client.setServer("113.98.233.209", 11888, "1");
 		
-		// Delete Person
+		// 删除指定说话人
 		Person person = new Person(client, idString, nameString);
-		person.setPassType(Constants.VOICEPRINT_TYPE_RANDOM_DIGITS);	// 随机数字口令
+		person.setPassType(Constants.VOICEPRINT_TYPE_FIXED_TEXT);	// 设置口令类型为：随机数字口令
 		if ((ret = person.delete()) != Constants.RETURN_SUCCESS) {
 			System.err.println(person.getLastErr()+":"+String.valueOf(ret));			
 		}
 		
-		// Create Person
-		if ( (ret = person.getInfo()) != Constants.RETURN_SUCCESS) {
+		// 创建说话人
+		if ( (ret = person.getInfo()) != Constants.RETURN_SUCCESS) {	// 先查询是否存在
 			if ( (ret = person.create()) != Constants.RETURN_SUCCESS) {
 				System.err.println(person.getLastErr()+":"+String.valueOf(ret));
 			}
 		}
 		
-		// 获取person对应的系统信息
+		// 获取说话人对应的系统信息
 		if ((ret = client.getSysInfo(person)) != Constants.RETURN_SUCCESS) {
-			System.err.println(client.getLastErr()+":"+String.valueOf(ret));			
+			// 第一次未获取成功时，再调用一次，避免因暂时性网络故障导致未获取成功
+			if ((ret = client.getSysInfo(person)) != Constants.RETURN_SUCCESS) {
+				System.err.println(client.getLastErr()+":"+String.valueOf(ret));
+			}
 		}
 		
-		// Create Speech
+		// 创建语音实例
 		Speech speech = new Speech("pcm/raw", 16000, true);		
-		speech.setRule(pwdString);
 		
-		// Add Speech to person
+		// 为说话人添加语音，添加之前先获取说话人当前信息
 		if ( (ret = person.getInfo()) != Constants.RETURN_SUCCESS) {
 			System.err.println(person.getLastErr()+":"+String.valueOf(ret));
-		} else if (person.getFlag() == false) {
+		} else if (person.getFlag() == false) {	// 如果未注册声纹
 			System.out.println(person.getId()+"\t"+person.getName()+"\t"+person.getStep()+"/"+client.getRegSteps());
-			for (String filepath : args) {
+			for (String filepath : args) {	// 语音文件列表
 				if ( (ret = person.getAuthCode()) != Constants.RETURN_SUCCESS) {
 					System.err.println(person.getLastErr()+":"+String.valueOf(ret));
 				} else {
@@ -66,32 +67,29 @@ public class Test {
 				}
 			}
 			
-			// Register voiceprint for speaker
+			// 注册声纹
 			if ((ret = client.registerVoiceprint(person)) != Constants.RETURN_SUCCESS) {
 				System.err.println(client.getLastErr()+":"+String.valueOf(ret));
 			}
 			
-			// Output result
 			System.out.println(person.getId()+"\t"+person.getName()+": Register voiceprint success.");
 		}
 		
-		// Verify voiceprint for speaker
+		// 声纹确认
 		VerifyRes res = new VerifyRes();
 		speech.setRule("5318"); 
 		speech.setData(readWavform("wav/ver_4digits_5318.wav"));
 		if ((ret = client.verifyVoiceprint(person, speech, res)) != Constants.RETURN_SUCCESS) {
 			System.err.println(client.getLastErr()+":"+String.valueOf(ret));
 		}
-		
-		// Output result
+
 		System.out.println(person.getId()+"\t"+person.getName()+": "+res.getResult()+"-"+res.getSimilarity());
 		
-		// Identify voiceprint for speaker
+		// 声纹辨认
 		if ((ret = client.identifyVoiceprint_2(person, speech, res)) != Constants.RETURN_SUCCESS) {
 			System.err.println(client.getLastErr()+":"+String.valueOf(ret));
 		}
 		
-		// Output result
 		System.out.println(person.getId()+"\t"+person.getName()+": "+res.getResult()+"-"+res.getSimilarity());
 	}
 	

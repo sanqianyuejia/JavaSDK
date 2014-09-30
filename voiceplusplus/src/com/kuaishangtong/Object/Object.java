@@ -1,4 +1,4 @@
-package Object;
+package com.kuaishangtong.Object;
 
 public class Object {
 	private String err;

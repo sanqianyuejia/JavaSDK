@@ -1,23 +1,22 @@
-package client;
+package com.kuaishangtong.client;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-import service.ClientService;
-import utils.Constants;
-import model.Speech;
-import model.Person;
-import Object.Object;
-import client.VerifyRes;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONArray;
+import com.kuaishangtong.service.ClientService;
+import com.kuaishangtong.utils.Constants;
+import com.kuaishangtong.model.Speech;
+import com.kuaishangtong.model.Person;
+import com.kuaishangtong.Object.Object;
+import com.kuaishangtong.client.VerifyRes;
 
 public class Client extends Object {
 	private String key;
 	private String secret;
 	private String version;
-	private int type;
 	private int reg_steps;
 	private int ver_steps;
 	private String server;
@@ -56,10 +55,8 @@ public class Client extends Object {
 	 * @param port
 	 * @return
 	 */
-	public synchronized int setServer(String host, int port, String version,
-			int type) {
+	public synchronized int setServer(String host, int port, String version) {
 		this.version = version;
-		this.type = type;
 		this.server = "http://" + host + ":" + String.valueOf(port) + "/"
 				+ this.version;
 
@@ -75,15 +72,15 @@ public class Client extends Object {
 		
 		JSONObject result = getClientService().clientGetSysInfo(person.getPassType());			
 		if (!result.getBoolean(Constants.SUCCESS)) {
-			ret = result.getInt(Constants.ERROR_CODE);
+			ret = result.getIntValue(Constants.ERROR_CODE);
 			super.setLastErr(result.getString(Constants.ERROR));
-			super.setErrCode(result.getInt(Constants.ERROR_CODE));
+			super.setErrCode(result.getIntValue(Constants.ERROR_CODE));
 		} else {
 			JSONArray authcode = (JSONArray) result.getJSONArray("authcode");
 			if (authcode.size() > 0) {
 				JSONObject p = (JSONObject) authcode.get(0);
-				this.setRegSteps(p.getInt(Constants.RSTEPS));
-				this.setVerSteps(p.getInt(Constants.VSTEPS));
+				this.setRegSteps(p.getIntValue(Constants.RSTEPS));
+				this.setVerSteps(p.getIntValue(Constants.VSTEPS));
 			}
 		}
 				
@@ -98,12 +95,42 @@ public class Client extends Object {
 		JSONObject result = getClientService().personFindAll(limit);
 
 		if (!result.getBoolean(Constants.SUCCESS)) {
-			ret = result.getInt(Constants.ERROR_CODE);
+			ret = result.getIntValue(Constants.ERROR_CODE);
 			super.setLastErr(result.getString(Constants.ERROR));
 			super.setErrCode(ret);
 		} else {
 			JSONArray persons = (JSONArray) result.getJSONArray("person");
-			Iterator<JSONObject> it = persons.iterator();
+			// Iterator<JSONObject> it = persons.iterator();
+			Iterator<java.lang.Object> it = persons.iterator();
+			while (it.hasNext()) {
+				JSONObject object = (JSONObject) it.next();
+				Person person = new Person(this); 
+				person.setId(object.getString(Constants.IDENTY));
+				person.setName(object.getString(Constants.NAME));
+				person.setTag(object.getString(Constants.TAG));
+				person.setFlag(object.getBoolean(Constants.FLAG));
+
+				personList.add(person);
+			}
+		}
+
+		return personList;
+	}
+	
+	public List<Person> getGroup(int limit, String id) {
+		List<Person> personList = new ArrayList<Person>();
+		int ret = Constants.RETURN_SUCCESS;
+
+		JSONObject result = getClientService().personFindGroup(limit, id);
+
+		if (!result.getBoolean(Constants.SUCCESS)) {
+			ret = result.getIntValue(Constants.ERROR_CODE);
+			super.setLastErr(result.getString(Constants.ERROR));
+			super.setErrCode(ret);
+		} else {
+			JSONArray persons = (JSONArray) result.getJSONArray("person");
+			// Iterator<JSONObject> it = persons.iterator();
+			Iterator<java.lang.Object> it = persons.iterator();
 			while (it.hasNext()) {
 				JSONObject object = (JSONObject) it.next();
 				Person person = new Person(this); 
@@ -133,10 +160,10 @@ public class Client extends Object {
 		if (!person.getId().isEmpty()) {
 			JSONObject result = getClientService().clientVerifyVoiceprint(
 					person.getId(), person.getName(), speech.getCodec(), speech.getSampleRate(),
-					speech.getVerify(), speech.getRule(), speech.getData());
+					speech.getVerify(), speech.getRule(), speech.getData(), person.getPassType());
 
 			if (!result.getBoolean(Constants.SUCCESS)) {
-				ret = result.getInt(Constants.ERROR_CODE);
+				ret = result.getIntValue(Constants.ERROR_CODE);
 				super.setLastErr(result.getString(Constants.ERROR));
 				super.setErrCode(ret);
 			} else {
@@ -157,10 +184,10 @@ public class Client extends Object {
 		int ret = Constants.RETURN_SUCCESS;
 
 		JSONObject result = getClientService().clientIdentifyVoiceprint(person.getId(),
-				speech.getCodec(), speech.getSampleRate(), speech.getData());
+				speech.getCodec(), speech.getSampleRate(), speech.getData(), person.getPassType());
 
 		if (!result.getBoolean(Constants.SUCCESS)) {
-			ret = result.getInt(Constants.ERROR_CODE);
+			ret = result.getIntValue(Constants.ERROR_CODE);
 			super.setLastErr(result.getString(Constants.ERROR));
 			super.setErrCode(ret);
 		} else {
@@ -178,10 +205,10 @@ public class Client extends Object {
 		int ret = Constants.RETURN_SUCCESS;
 
 		JSONObject result = getClientService().clientIdentifyVoiceprint_2(person.getId(),
-				speech.getCodec(),speech.getSampleRate(), speech.getVerify(), speech.getRule(), speech.getData());
+				speech.getCodec(),speech.getSampleRate(), speech.getVerify(), speech.getRule(), speech.getData(), person.getPassType());
 
 		if (!result.getBoolean(Constants.SUCCESS)) {
-			ret = result.getInt(Constants.ERROR_CODE);
+			ret = result.getIntValue(Constants.ERROR_CODE);
 			super.setLastErr(result.getString(Constants.ERROR));
 			super.setErrCode(ret);
 		} else {
@@ -208,7 +235,7 @@ public class Client extends Object {
 					person.getId(), person.getName(), true);
 
 			if (!result.getBoolean(Constants.SUCCESS)) {
-				ret = result.getInt(Constants.ERROR_CODE);
+				ret = result.getIntValue(Constants.ERROR_CODE);
 				super.setLastErr(result.getString(Constants.ERROR));
 				super.setErrCode(ret);
 			}
@@ -235,7 +262,7 @@ public class Client extends Object {
 					person.getId(), person.getName(), false);
 
 			if (!result.getBoolean(Constants.SUCCESS)) {
-				ret = result.getInt(Constants.ERROR_CODE);
+				ret = result.getIntValue(Constants.ERROR_CODE);
 				super.setLastErr(result.getString(Constants.ERROR));
 				super.setErrCode(ret);
 			}
@@ -272,9 +299,6 @@ public class Client extends Object {
 		this.secret = secret;
 	}
 
-	public void setType(int type) {
-		this.type = type;
-	}
 	
 	private void setRegSteps(int steps) {
 		this.reg_steps = steps;
@@ -284,13 +308,4 @@ public class Client extends Object {
 		this.ver_steps = steps;
 	}
 
-	public String getType() {
-		if (this.type == Constants.TEXT_INDEPENDENT) {
-			return Constants.TEXT_INDEPENDENT_STR;
-		} else if (this.type == Constants.TEXT_PROMPT) {
-			return Constants.TEXT_PROMPT_STR;
-		} else {
-			return Constants.TEXT_DEPENDENT_STR;
-		}
-	}
 }
